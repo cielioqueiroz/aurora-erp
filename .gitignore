@@ -1,0 +1,60 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+Thumbs.db
+
+# Build
+node_modules
+dist
+dist-ssr
+*.local
+build
+coverage
+
+# Test
+cypress/videos
+cypress/screenshots
+cypress/downloads
+.nyc_output
+
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Supabase
+supabase/.branches
+supabase/.temp
+.supabase
+
+# Misc
+.cache
+.parcel-cache
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+
+# Husky
+.husky/_
+
+# Claude Code (memória/transcripts locais)
+.claude
+.claude/
