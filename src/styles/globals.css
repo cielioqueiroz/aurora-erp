@@ -4,105 +4,91 @@
 
 @layer base {
   :root {
-    /* AURORA Premium — light theme (Pearl + Cobalt + Champagne) */
-    --background: 220 25% 98%;
-    --foreground: 222 35% 11%;
+    --background: 240 20% 98%;
+    --foreground: 240 6% 10%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 35% 11%;
+    --card-foreground: 240 6% 10%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 35% 11%;
+    --popover-foreground: 240 6% 10%;
 
-    /* Cobalt — primary CTA / brand action (trust, dependable) */
-    --primary: 215 70% 45%;
+    --primary: 221 83% 53%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 20% 95%;
-    --secondary-foreground: 222 35% 11%;
+    --secondary: 240 6% 96%;
+    --secondary-foreground: 240 6% 10%;
 
-    --muted: 220 16% 94%;
-    --muted-foreground: 220 10% 42%;
+    --muted: 240 6% 96%;
+    --muted-foreground: 240 4% 46%;
 
-    /* Champagne — accent (premium highlights, badges, charts) */
-    --accent: 35 55% 48%;
+    --accent: 32 95% 44%;
     --accent-foreground: 0 0% 100%;
 
-    /* Garnet — destructive (refined, not shock-red) */
-    --destructive: 355 62% 48%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Sage — success (calm, professional) */
-    --success: 155 50% 36%;
+    --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
 
-    /* Tobacco — warning (warm amber) */
-    --warning: 32 85% 48%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 240 6% 10%;
 
-    /* Steel — info (cool cyan-blue) */
-    --info: 200 78% 42%;
+    --info: 200 78% 50%;
     --info-foreground: 0 0% 100%;
 
-    --border: 220 14% 89%;
-    --input: 220 14% 89%;
-    --ring: 215 70% 45%;
+    --border: 240 6% 90%;
+    --input: 240 6% 90%;
+    --ring: 221 83% 53%;
 
     --radius: 0.625rem;
 
-    --sidebar: 220 22% 97%;
-    --sidebar-foreground: 222 35% 11%;
-    --sidebar-border: 220 14% 89%;
+    --sidebar: 0 0% 100%;
+    --sidebar-foreground: 240 6% 10%;
+    --sidebar-border: 240 6% 90%;
   }
 
   .dark {
-    /* AURORA Premium — dark theme (Onyx Navy + Cobalt + Champagne) */
-    --background: 222 45% 6%;
-    --foreground: 213 28% 92%;
+    --background: 240 6% 10%;
+    --foreground: 240 5% 96%;
 
-    --card: 222 38% 9%;
-    --card-foreground: 213 28% 92%;
+    --card: 240 4% 16%;
+    --card-foreground: 240 5% 96%;
 
-    --popover: 222 38% 9%;
-    --popover-foreground: 213 28% 92%;
+    --popover: 240 4% 16%;
+    --popover-foreground: 240 5% 96%;
 
-    /* Cobalt — light enough to pop on dark, still cool/trustworthy */
-    --primary: 212 80% 62%;
-    --primary-foreground: 222 45% 6%;
+    --primary: 173 80% 40%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 222 30% 13%;
-    --secondary-foreground: 213 28% 92%;
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 240 5% 96%;
 
-    --muted: 222 28% 13%;
-    --muted-foreground: 215 16% 62%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 65%;
 
-    /* Champagne — accent */
-    --accent: 38 55% 65%;
-    --accent-foreground: 222 45% 6%;
+    --accent: 239 84% 67%;
+    --accent-foreground: 0 0% 100%;
 
-    /* Garnet */
-    --destructive: 355 65% 58%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Sage */
-    --success: 155 45% 50%;
-    --success-foreground: 222 45% 6%;
+    --success: 160 84% 39%;
+    --success-foreground: 0 0% 100%;
 
-    /* Tobacco */
-    --warning: 32 80% 60%;
-    --warning-foreground: 222 45% 6%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 240 6% 10%;
 
-    /* Steel */
-    --info: 200 72% 58%;
-    --info-foreground: 222 45% 6%;
+    --info: 200 78% 58%;
+    --info-foreground: 240 6% 10%;
 
-    --border: 222 28% 14%;
-    --input: 222 28% 14%;
-    --ring: 212 80% 62%;
+    --border: 240 5% 26%;
+    --input: 240 4% 16%;
+    --ring: 173 80% 40%;
 
-    --sidebar: 222 42% 5%;
-    --sidebar-foreground: 213 28% 92%;
-    --sidebar-border: 222 28% 13%;
+    --sidebar: 240 4% 16%;
+    --sidebar-foreground: 240 5% 96%;
+    --sidebar-border: 240 5% 26%;
   }
 }
 
@@ -120,7 +106,6 @@
     @apply bg-background text-foreground;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   }
-  /* Scrollbar premium */
   ::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -134,52 +119,32 @@
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-muted-foreground/40;
   }
-
-  /* Focus ring consistente */
   :focus-visible {
     @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
   }
-
-  /* Numbers tabulares para valores monetários */
   .tabular-nums {
     font-variant-numeric: tabular-nums;
   }
 }
 
 @layer components {
-  /* Sidebar surface helper */
   .surface-sidebar {
     background-color: hsl(var(--sidebar));
     color: hsl(var(--sidebar-foreground));
     border-color: hsl(var(--sidebar-border));
   }
 
-  /* Auth brand panel — Obsidian + Champagne (premium, no purple) */
-  .bg-obsidian {
+  .bg-onyx {
     background:
-      radial-gradient(ellipse 60% 50% at 78% 18%, hsl(38 60% 55% / 0.14), transparent 60%),
-      radial-gradient(ellipse 70% 60% at 12% 88%, hsl(218 65% 22% / 0.35), transparent 65%),
-      linear-gradient(160deg, hsl(222 50% 6%) 0%, hsl(225 45% 4%) 55%, hsl(230 40% 3%) 100%);
-  }
-  .text-champagne {
-    color: hsl(38 50% 72%);
-  }
-  .border-champagne\/20 {
-    border-color: hsl(38 50% 72% / 0.2);
-  }
-  .bg-champagne-soft {
-    background-color: hsl(38 50% 72% / 0.08);
-  }
-  .ring-champagne\/30 {
-    --tw-ring-color: hsl(38 50% 72% / 0.3);
+      radial-gradient(ellipse 60% 50% at 78% 18%, hsl(var(--primary) / 0.12), transparent 60%),
+      radial-gradient(ellipse 70% 60% at 12% 88%, hsl(var(--primary) / 0.08), transparent 65%),
+      linear-gradient(160deg, hsl(240 6% 10%) 0%, hsl(240 6% 7%) 55%, hsl(240 6% 5%) 100%);
   }
 
-  /* Glass card effect */
   .glass {
     @apply border border-border/60 bg-card/70 backdrop-blur-xl;
   }
 
-  /* Shimmer skeleton */
   .skeleton-shimmer {
     background: linear-gradient(
       90deg,
