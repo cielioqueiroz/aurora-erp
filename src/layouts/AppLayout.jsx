@@ -10,9 +10,9 @@ export function AppLayout() {
   const location = useLocation();
   return (
     <NuqsAdapter>
-      <div className="flex min-h-screen w-full bg-background text-foreground">
+      <div className="flex h-screen w-full overflow-hidden bg-background text-foreground">
         <Sidebar />
-        <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+        <div className="flex h-screen min-w-0 flex-1 flex-col">
           <DemoBanner />
           <Topbar />
           <main className="flex-1 overflow-auto">
