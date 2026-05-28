@@ -24,9 +24,7 @@ export function ProfileForm({ defaultValues, email, loading, onCancel, onSubmit 
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
       <div className="flex items-center gap-4">
         <Avatar className="h-16 w-16">
-          <AvatarFallback className="text-base">
-            {getInitials(liveName)}
-          </AvatarFallback>
+          <AvatarFallback className="text-base">{getInitials(liveName)}</AvatarFallback>
         </Avatar>
         <div>
           <p className="font-semibold">{liveName}</p>
