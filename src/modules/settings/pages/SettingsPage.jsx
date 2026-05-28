@@ -2,14 +2,13 @@ import { Building2, Moon, Palette, Sun, User } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { FormField } from '@/components/forms/FormField';
-import { useAuthStore } from '@/store/authStore';
 import { useCurrentCompany } from '@/hooks/useCurrentCompany';
 import { useTheme } from '@/hooks/useTheme';
-import { formatCNPJ, formatPhone, getInitials } from '@/lib/formatters';
+import { formatCNPJ, formatPhone } from '@/lib/formatters';
 import { cn } from '@/lib/cn';
+import { ProfileCard } from '../components/ProfileCard';
 
 function ThemeCard({ label, icon: Icon, active, onClick }) {
   return (
@@ -30,11 +29,8 @@ function ThemeCard({ label, icon: Icon, active, onClick }) {
 }
 
 export function SettingsPage() {
-  const user = useAuthStore((s) => s.user);
   const company = useCurrentCompany();
   const { theme, setTheme } = useTheme();
-
-  const fullName = user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'Usuário';
 
   return (
     <div>
@@ -54,35 +50,7 @@ export function SettingsPage() {
         </TabsList>
 
         <TabsContent value="profile">
-          <Card>
-            <CardHeader>
-              <CardTitle>Seu perfil</CardTitle>
-              <CardDescription>Como você aparece para o time.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              <div className="flex items-center gap-4">
-                <Avatar className="h-16 w-16">
-                  <AvatarFallback className="text-base">{getInitials(fullName)}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-semibold">{fullName}</p>
-                  <p className="text-sm text-muted-foreground">{user?.email}</p>
-                </div>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-2">
-                <FormField label="Nome">
-                  <Input defaultValue={fullName} readOnly />
-                </FormField>
-                <FormField label="E-mail">
-                  <Input defaultValue={user?.email ?? ''} readOnly />
-                </FormField>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Edição de perfil chega na próxima iteração.
-              </p>
-            </CardContent>
-          </Card>
+          <ProfileCard />
         </TabsContent>
 
         <TabsContent value="company">
