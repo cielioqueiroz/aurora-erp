@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuthStore } from '@/store/authStore';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, ArrowRight, Building2, Check, Loader2, User } from 'lucide-react';
@@ -207,7 +208,15 @@ function DoneStep() {
 }
 
 export function SignupPage() {
-  const [step, setStep] = useState(0);
+  const isAuthenticated = useAuthStore((s) => s.status === 'authenticated');
+  const hasCompanies = useAuthStore((s) => s.companies.length > 0);
+  const [step, setStep] = useState(isAuthenticated && !hasCompanies ? 1 : 0);
+
+  // Se a sessão for resolvida depois da montagem (autenticado sem empresa),
+  // pula direto para o passo "empresa" ao invés de pedir login de novo.
+  useEffect(() => {
+    if (isAuthenticated && !hasCompanies && step === 0) setStep(1);
+  }, [isAuthenticated, hasCompanies, step]);
 
   return (
     <div>

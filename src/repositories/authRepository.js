@@ -65,7 +65,10 @@ export const authRepository = {
       p_email: email,
       p_phone: phone,
     });
-    return unwrap(res);
+    const company = unwrap(res);
+    // Recarrega o JWT para incorporar a claim current_company_id
+    await supabase.auth.refreshSession();
+    return company;
   },
 
   async switchCompany(companyId) {
