@@ -1,14 +1,11 @@
 import { Building2, Moon, Palette, Sun, User } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FormField } from '@/components/forms/FormField';
-import { useCurrentCompany } from '@/hooks/useCurrentCompany';
 import { useTheme } from '@/hooks/useTheme';
-import { formatCNPJ, formatPhone } from '@/lib/formatters';
 import { cn } from '@/lib/cn';
 import { ProfileCard } from '../components/ProfileCard';
+import { CompanyCard } from '../components/CompanyCard';
 
 function ThemeCard({ label, icon: Icon, active, onClick }) {
   return (
@@ -29,7 +26,6 @@ function ThemeCard({ label, icon: Icon, active, onClick }) {
 }
 
 export function SettingsPage() {
-  const company = useCurrentCompany();
   const { theme, setTheme } = useTheme();
 
   return (
@@ -54,34 +50,7 @@ export function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="company">
-          <Card>
-            <CardHeader>
-              <CardTitle>Dados da empresa</CardTitle>
-              <CardDescription>Informações exibidas em notas e contratos.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <FormField label="Razão social">
-                  <Input defaultValue={company?.name ?? ''} readOnly />
-                </FormField>
-                <FormField label="CNPJ">
-                  <Input
-                    defaultValue={company?.document ? formatCNPJ(company.document) : ''}
-                    readOnly
-                  />
-                </FormField>
-                <FormField label="E-mail">
-                  <Input defaultValue={company?.email ?? ''} readOnly />
-                </FormField>
-                <FormField label="Telefone">
-                  <Input defaultValue={company?.phone ? formatPhone(company.phone) : ''} readOnly />
-                </FormField>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Edição de dados da empresa chega na próxima iteração.
-              </p>
-            </CardContent>
-          </Card>
+          <CompanyCard />
         </TabsContent>
 
         <TabsContent value="appearance">
