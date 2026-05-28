@@ -1,0 +1,21 @@
+export const ROUTES = Object.freeze({
+  ROOT: '/',
+  LOGIN: '/login',
+  SIGNUP: '/signup',
+  RECOVER: '/recover',
+  RESET: '/reset-password',
+  ACCEPT_INVITE: '/accept-invite',
+  ONBOARDING: '/onboarding',
+
+  DASHBOARD: '/dashboard',
+  CUSTOMERS: '/customers',
+  SUPPLIERS: '/suppliers',
+  PRODUCTS: '/products',
+  INVENTORY: '/inventory',
+  ORDERS: '/orders',
+  FINANCE: '/finance',
+  REPORTS: '/reports',
+  USERS: '/users',
+  ROLES: '/roles',
+  SETTINGS: '/settings',
+});
