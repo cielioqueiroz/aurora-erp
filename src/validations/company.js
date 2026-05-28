@@ -23,6 +23,6 @@ export const companySchema = z.object({
     .optional()
     .or(z.literal(''))
     .transform((v) => (v ? v : null))
-    .refine((v) => v === null || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v), 'E-mail inválido'),
+    .refine((v) => v === null || z.string().email().safeParse(v).success, 'E-mail inválido'),
   phone: optionalNullable(isValidPhone, 'Telefone inválido'),
 });

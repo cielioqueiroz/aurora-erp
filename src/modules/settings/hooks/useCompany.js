@@ -8,8 +8,8 @@ export function useUpdateCompany(options = {}) {
   return useMutation({
     mutationFn: ({ id, payload }) => companyRepository.update(id, payload),
     onSuccess: async (data, vars, ctx) => {
-      const companies = await authRepository.listMyCompanies();
-      useAuthStore.getState().setCompanies(companies ?? []);
+      const companies = await authRepository.listMyCompanies().catch(() => null);
+      if (companies) useAuthStore.getState().setCompanies(companies);
       qc.invalidateQueries({ queryKey: ['companies'] });
       options.onSuccess?.(data, vars, ctx);
     },

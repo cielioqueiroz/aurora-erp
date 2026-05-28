@@ -39,9 +39,9 @@ export function CompanyCard() {
 
   const defaults = {
     name: company.name ?? '',
-    document: company.document ?? '',
+    document: company.document ? formatCNPJ(company.document) : '',
     email: company.email ?? '',
-    phone: company.phone ?? '',
+    phone: company.phone ? formatPhone(company.phone) : '',
   };
 
   return (

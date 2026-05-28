@@ -16,6 +16,10 @@ describe('companySchema', () => {
     expect(() => companySchema.parse({ name: '' })).toThrow(/Razão social/);
   });
 
+  it('rejeita name com apenas whitespace (vira vazio após trim)', () => {
+    expect(() => companySchema.parse({ name: '   ' })).toThrow(/Razão social/);
+  });
+
   it('faz trim do name', () => {
     const result = companySchema.parse({ name: '  Nexus LTDA  ' });
     expect(result.name).toBe('Nexus LTDA');

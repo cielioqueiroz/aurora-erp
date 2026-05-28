@@ -11,22 +11,25 @@ export function ProfileForm({ defaultValues, email, loading, onCancel, onSubmit 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isDirty },
   } = useForm({
     resolver: zodResolver(profileSchema),
     defaultValues,
   });
 
+  const liveName = watch('full_name') ?? defaultValues.full_name;
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
       <div className="flex items-center gap-4">
         <Avatar className="h-16 w-16">
           <AvatarFallback className="text-base">
-            {getInitials(defaultValues.full_name)}
+            {getInitials(liveName)}
           </AvatarFallback>
         </Avatar>
         <div>
-          <p className="font-semibold">{defaultValues.full_name}</p>
+          <p className="font-semibold">{liveName}</p>
           <p className="text-sm text-muted-foreground">{email}</p>
         </div>
       </div>
