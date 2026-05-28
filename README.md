@@ -1,235 +1,184 @@
 # AURORA ERP
 
-> Sistema de gestão multi-tenant enterprise — React + Vite + Supabase.
-
-[![Stack](https://img.shields.io/badge/stack-React%20%7C%20Vite%20%7C%20Supabase-4F46E5)]()
-[![License](https://img.shields.io/badge/license-Proprietary-1F2937)]()
-
-AURORA ERP é um SaaS de gestão para PMEs brasileiras, construído com arquitetura enterprise, design system próprio e isolamento multi-empresa nativo via Row Level Security do Supabase.
-
----
+Sistema de gestão multi-tenant para PMEs brasileiras. React + Vite + Supabase, com isolamento por empresa via RLS e RBAC granular por módulo.
 
 ## Stack
 
-**Frontend**
-
-- React 18 + Vite 6
-- Tailwind CSS + design tokens (Aurora Indigo)
-- Shadcn-style primitives (Radix UI)
-- TanStack Query · Zustand · React Hook Form · Zod
-- Framer Motion · Recharts · Lucide · cmdk · nuqs
-
-**Backend / Infra**
-
-- Supabase (PostgreSQL · Auth · Storage · Realtime · Edge Functions)
-- RLS multi-tenant com função helper `auth.current_company_id()`
-- RBAC granular (`<module>.<action>`)
-
-**Qualidade**
-
-- Vitest + Testing Library + MSW
-- Cypress (E2E)
-- ESLint flat config + Prettier + Husky + lint-staged
-
----
+- React 18, Vite 6, Tailwind CSS, Radix UI
+- TanStack Query, Zustand, React Hook Form, Zod
+- Framer Motion, Recharts, lucide-react, cmdk, nuqs
+- Supabase (Postgres, Auth, RLS, RPCs)
+- Vitest, Testing Library, MSW, Cypress
+- ESLint, Prettier, Husky, lint-staged
 
 ## Pré-requisitos
 
-- Node.js >= 20
-- npm >= 10
-- (Opcional) Supabase CLI para desenvolvimento local
+- Node.js 20+
+- npm 10+
+- Projeto Supabase (cloud ou CLI local)
 
----
-
-## Setup rápido
+## Setup
 
 ```bash
-# 1. Clonar
-git clone <seu-repo> aurora-erp
+git clone git@github.com:cielioqueiroz/aurora-erp.git
 cd aurora-erp
-
-# 2. Instalar
 npm install
-
-# 3. Configurar variáveis
 cp .env.example .env
-# edite .env com VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY
-
-# 4. Rodar
 npm run dev
 ```
 
-> Sem `.env` configurado, o app ainda roda — o aviso fica no console e a UI/UX é totalmente navegável (você só não consegue logar até apontar para um Supabase real).
-
----
+Edite `.env` com a `VITE_SUPABASE_URL` e a `VITE_SUPABASE_ANON_KEY` do seu projeto Supabase. O app sobe em `http://localhost:5173`.
 
 ## Scripts
 
-| Comando | O que faz |
-|---|---|
-| `npm run dev` | Sobe o Vite em `http://localhost:5173` |
-| `npm run build` | Build de produção em `dist/` |
-| `npm run preview` | Serve o build local |
-| `npm run lint` | ESLint com `--max-warnings 0` |
-| `npm run lint:fix` | ESLint com autofix |
-| `npm run format` | Prettier write |
-| `npm run format:check` | Prettier check |
-| `npm run test` | Vitest (modo run) |
-| `npm run test:watch` | Vitest (modo watch) |
-| `npm run test:ui` | Vitest UI |
-| `npm run test:coverage` | Cobertura |
-| `npm run test:e2e` | Cypress headless |
-| `npm run test:e2e:open` | Cypress GUI |
-
----
+| Comando            | Ação                         |
+| ------------------ | ---------------------------- |
+| `npm run dev`      | Vite dev server              |
+| `npm run build`    | Build de produção em `dist/` |
+| `npm run preview`  | Serve o build localmente     |
+| `npm run lint`     | ESLint (`--max-warnings 0`)  |
+| `npm run lint:fix` | ESLint autofix               |
+| `npm run format`   | Prettier write               |
+| `npm run test`     | Vitest                       |
+| `npm run test:e2e` | Cypress headless             |
 
 ## Estrutura
 
 ```
 src/
-├── app/                  bootstrap (App, Providers, QueryClient, AuthBootstrap)
-├── routes/               router + guards (ProtectedRoute, PublicOnlyRoute, Can)
-├── layouts/              AppLayout, AuthLayout
-├── modules/              fatias verticais (auth, dashboard, customers, ...)
-├── components/
-│   ├── ui/               primitives Shadcn-style
-│   ├── forms/            FormField
-│   ├── tables/           DataTable (em construção)
-│   ├── charts/           KpiCard, Sparkline
-│   ├── feedback/         EmptyState, ErrorFallback, LoadingScreen
-│   ├── navigation/       Sidebar, Topbar, CommandPalette, Breadcrumbs
-│   └── layout/           PageHeader, Section
-├── repositories/         baseRepository + repos por domínio
-├── hooks/                useAuth, usePermission, useCurrentCompany, ...
-├── store/                Zustand (authStore, uiStore, themeStore)
-├── lib/                  cn(), formatters BR, parsers
-├── integrations/supabase/ client + helpers de erro
-├── validations/          schemas Zod + validadores CPF/CNPJ
-├── constants/            permissions, roles, modules, routes
-├── styles/               globals.css + tokens
-└── tests/                MSW handlers, setup, utils
+  app/                 Bootstrap, Providers, QueryClient, AuthBootstrap
+  routes/              Router, ProtectedRoute, PublicOnlyRoute, Can
+  layouts/             AppLayout, AuthLayout
+  modules/             Fatias verticais por domínio
+    auth/              Login, signup, recover, reset
+    dashboard/         KPIs, charts, recent activity
+    customers/         CRUD com filtros, busca e validação BR
+    suppliers/         CRUD de fornecedores
+    products/          Produtos com SKU, preço, custo
+    inventory/         Movimentações de estoque
+    orders/            Pedidos com itens e pagamentos
+    finance/           Contas a pagar/receber
+    users/             Gestão de membros da empresa
+    roles/             Papéis e permissões
+    settings/          Perfil, empresa, tema
+    reports/           Análises e gráficos
+  components/
+    ui/                Primitives Shadcn-style
+    forms/             FormField, CrudSheet
+    tables/            DataTable, RowActions
+    charts/            KpiCard, Sparkline
+    navigation/        Sidebar, Topbar, CommandPalette
+    layout/            PageHeader, Section
+    feedback/          EmptyState, ErrorFallback, LoadingScreen
+  repositories/        Camada de acesso a dados (base + por domínio)
+  hooks/               useAuth, usePermission, useCurrentCompany, useResource
+  store/               Zustand: authStore, uiStore, themeStore
+  integrations/        Supabase client + tratamento de erros
+  validations/         Schemas Zod + validadores CPF/CNPJ
+  constants/           Permissions, roles, modules, routes
+  lib/                 cn, formatters, parsers
+  styles/              globals.css + design tokens
+  tests/               Setup, MSW handlers, helpers
 supabase/
-├── migrations/           0001..0005 (multi-tenant, RBAC, audit, domínio, RPCs)
-└── seeds/                permissions + papéis seed
+  migrations/          0001 multi-tenant, 0002 RBAC, 0003 audit/notificações,
+                       0004 domínio, 0005 RPCs de signup, 0006 hardening
+  seeds/               Permissions e papéis
 ```
 
----
-
-## Arquitetura em camadas
+## Arquitetura
 
 ```
-UI Components (apresentação)
-        ↓
-Hooks (useCustomers, useCreateOrder)
-        ↓
-Services / Use Cases (regra de negócio)
-        ↓
-Repositories (customersRepository.list)
-        ↓
-Supabase Client (integrations/supabase)
+Componentes (apresentação)
+    -> Hooks (TanStack Query)
+    -> Repositories (acesso a dados)
+    -> Supabase Client
 ```
 
-**Regras invioláveis:**
-
-- Componentes NUNCA importam `@/integrations/supabase` direto.
-- Hooks consomem repositories via TanStack Query.
-- Schemas Zod ficam em `validations/`, compartilhados entre form e service.
-- Cada módulo é uma fatia vertical em `modules/<feature>/`.
-
----
+Componentes nunca importam o cliente Supabase diretamente. Toda regra de acesso a dados passa pelos repositórios.
 
 ## Multi-tenancy
 
-- Toda tabela de domínio tem `company_id`.
-- A empresa ativa é lida do JWT: `app_metadata.current_company_id`.
-- Função Postgres `auth.current_company_id()` resolve a claim (com fallback para 1ª empresa do usuário).
-- RLS isola por tenant em todas as policies.
-- `RPC create_company_with_owner` cria empresa + vincula owner no signup.
-- `RPC switch_active_company` troca a empresa ativa.
+Todas as tabelas de domínio carregam `company_id`. A empresa ativa é uma claim no JWT (`app_metadata.current_company_id`), lida no Postgres pela função `public.current_company_id()`. As policies de RLS isolam por tenant em SELECT, INSERT, UPDATE e DELETE.
 
----
+RPCs principais:
+
+- `create_company_with_owner(p_name, p_document, p_email, p_phone)` — cria a empresa, vincula o usuário como owner e atualiza a claim.
+- `switch_active_company(p_company_id)` — troca a empresa ativa de um usuário que pertence a mais de uma.
 
 ## RBAC
 
-Permissões granulares no formato `<module>.<action>`:
+37 permissions no formato `<module>.<action>`, agrupadas em 5 papéis seed:
 
-- `customers.{read,create,update,delete}`
-- `orders.{read,create,update,cancel,refund}`
-- `inventory.{read,move,adjust}`
-- …e por aí vai (ver `src/constants/permissions.js`).
+- `owner` — todas as permissions
+- `admin` — gestão completa exceto delete de empresa
+- `manager` — gestão operacional (clientes, pedidos, estoque, financeiro)
+- `operator` — execução (criar pedidos, mover estoque)
+- `viewer` — somente leitura
 
-**Papéis seed:** `owner`, `admin`, `manager`, `operator`, `viewer`.
-
-**Frontend:**
+No frontend:
 
 ```jsx
 import { Can } from '@/routes/Can';
 import { usePermission } from '@/hooks/usePermission';
 import { PERMISSIONS } from '@/constants/permissions';
 
-const canCreate = usePermission(PERMISSIONS.CUSTOMERS_CREATE);
+const canDelete = usePermission(PERMISSIONS.CUSTOMERS_DELETE);
 
 <Can permission={PERMISSIONS.CUSTOMERS_DELETE}>
   <Button variant="destructive">Excluir</Button>
-</Can>
+</Can>;
 ```
 
-**Backend:** policies usam `auth.has_permission('customers.create')` no `with check`.
+No backend, policies usam `public.has_permission('customers.create')` no `with check`.
 
----
+## Design system
 
-## Aplicar o schema Supabase
+Paleta unificada Aurora Premium:
 
-### Opção A — Cloud (Dashboard SQL Editor)
+| Token         | Cor                                   | Uso                                         |
+| ------------- | ------------------------------------- | ------------------------------------------- |
+| `primary`     | Cobalt blue                           | Ações, links, navegação ativa               |
+| `accent`      | Champagne                             | Detalhes premium, segunda série de gráficos |
+| `success`     | Sage                                  | Confirmações, lucro, status OK              |
+| `warning`     | Tobacco amber                         | Alertas                                     |
+| `destructive` | Garnet                                | Erros, exclusões                            |
+| `info`        | Steel blue                            | Tooltips, dicas neutras                     |
+| `background`  | Onyx navy (dark) / Pearl gray (light) | Canvas                                      |
+| `sidebar`     | Tom distinto do canvas                | Navegação                                   |
+
+## Aplicar o schema
+
+### Supabase Cloud
 
 1. Crie um projeto em https://supabase.com/dashboard
-2. Em **SQL Editor**, rode em ordem:
+2. No SQL Editor, execute em ordem:
    - `supabase/migrations/0001_init_multitenancy.sql`
    - `supabase/migrations/0002_rbac.sql`
    - `supabase/migrations/0003_audit_notifications.sql`
    - `supabase/migrations/0004_domain_tables.sql`
    - `supabase/migrations/0005_signup_rpc.sql`
+   - `supabase/migrations/0006_security_hardening.sql`
    - `supabase/seeds/0001_permissions_and_roles.sql`
-3. Copie a `URL` e `anon key` em **Settings → API** e cole em `.env`.
+3. Em **Settings > API**, copie `URL` e `anon key` para `.env`
+4. Em **Authentication > Providers > Email**, desligue "Confirm email" se quiser pular a confirmação no fluxo de signup
 
-### Opção B — Local (Supabase CLI)
+### Supabase CLI (local)
 
 ```bash
 supabase init
 supabase start
-supabase db reset   # aplica todas migrations + seeds
+supabase db reset
 ```
 
----
+## Convenções
 
-## Roadmap
-
-### ✅ Etapa 1 — Fundação
-Vite, Tailwind, design tokens, lint/format/hooks, testes, lib, providers, error boundary.
-
-### ✅ Etapa 2 — Supabase + Auth + RBAC
-Migrations multi-tenant + RBAC + audit, client + repositories, stores, hooks, login/signup/recover/reset, ProtectedRoute + Can.
-
-### ✅ Etapa 3 — Design System + Dashboard
-Primitives, AppShell (Sidebar + Topbar + CommandPalette), DashboardPage (KPIs + charts + atividades), tema persistido, route transitions.
-
-### 🔜 Próximas etapas
-- **Etapa 4** — módulos de domínio: Customers → Products → Orders → Inventory → Finance → Users/Roles
-- **Etapa 5** — refinamentos UX (atalhos, undo de delete, optimistic everything)
-- **Etapa 6** — testes E2E completos + documentação técnica
-
----
-
-## Convenções de código
-
-- Componentes em PascalCase (`KpiCard.jsx`); utilitários em camelCase (`formatters.js`).
-- Imports usam alias absoluto: `@/components/...`, `@/lib/...`.
-- Sem `console.log` em produção (lint avisa).
-- Mensagens de erro user-facing em PT-BR.
-- Schemas Zod retornam mensagens em PT-BR.
-
----
+- Componentes em PascalCase, utilitários em camelCase
+- Imports usam alias absoluto: `@/components/...`
+- Sem `console.log` em produção
+- Mensagens user-facing em PT-BR
+- Schemas Zod retornam mensagens em PT-BR
+- Sem comentários no código (código autoexplicativo via nomenclatura)
 
 ## Licença
 
-Proprietary © AURORA ERP. Todos os direitos reservados.
+Proprietary. Todos os direitos reservados.
