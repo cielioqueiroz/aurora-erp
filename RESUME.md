@@ -44,18 +44,54 @@ Sou Cielio Queiroz (cielioqueiroz@hotmail.com). Estou construindo o **Aurora ERP
 
 ## PENDÊNCIAS PRIORIZADAS
 
-**ALTA prioridade (fechar MVP):**
+### Account lifecycle — bloqueia abrir cadastro pra terceiros
 
-1. "Novo pedido" wizard — atualmente botão desabilitado em `src/modules/orders/pages/OrdersListPage.jsx:138`
-2. Página de Auditoria consumindo `audit_logs` (criar `src/modules/audit/`)
-3. Top produtos no Reports vindo do `order_items` real (atualmente `Math.random()` em `src/modules/reports/pages/ReportsPage.jsx:86-96`)
-4. Realtime nas notificações via Supabase Realtime
-5. Upload de avatar no perfil + foto da empresa (depende de configurar Supabase Storage — agrupar com item 8)
-6. Mudança de e-mail do user (depende de SMTP — agrupar com item 15)
+Hoje o app funciona pra teste interno, mas o ciclo de vida da conta não está pronto pra produção pública (LGPD + UX básica).
 
-**MÉDIA prioridade:** 7. Editor granular de permissões (Roles) — `src/modules/roles/pages/RolesListPage.jsx:69` diz "chega na próxima iteração" 8. Upload de imagens de produtos (Supabase Storage) — campo `images` existe no schema 9. Convite real de membros (atualmente mockado) 10. Switch de empresa quando user tem 2+ 11. Export em outras páginas (Pedidos, Financeiro, Inventário) — usar `src/lib/exporters.js` 12. Reports: DRE simplificado + fluxo de caixa mensal
+1. **SMTP no Supabase** — sem SMTP, o link de "Recuperar senha" nunca chega e qualquer fluxo que envie e-mail (confirmação de signup, troca de e-mail, convite de membro) está quebrado fim-a-fim. UI já chama Supabase certinho; falta só o transporte.
+2. **Ligar "Confirm email" no Supabase Auth** — depois do SMTP. Hoje signup entra direto sem confirmar.
+3. **Trocar senha estando logado** — UI não existe na aba Perfil de Settings. Implementar usando `supabase.auth.updateUser({ password })` (já existe `authRepository.updatePassword`).
+4. **Trocar e-mail do user** — depende de SMTP (Supabase manda confirmação pro novo e-mail). UI também não existe.
+5. **Re-enviar e-mail de confirmação** — botão na tela de login pra quem ainda não confirmou (quando #2 estiver ativo).
+6. **Excluir conta (LGPD)** — não existe rota, RPC ou Edge Function. Implementar: Edge Function `delete-account` com Service Role chamando `auth.admin.deleteUser(uid)` + RPC que faz soft-delete em `user_companies`/`profiles` antes. Botão "Excluir conta" em Settings → Perfil com confirmação dupla.
+7. **Encerrar sessões em outros dispositivos** — `supabase.auth.signOut({ scope: 'others' })` (Supabase JS v2.43+).
 
-**BAIXA prioridade / Infra:** 13. Deploy Vercel 14. CI no GitHub Actions 15. SMTP (Auth > Email confirmation está OFF agora) 16. Cobertura de testes 17. Remover demo mode (já não é necessário) 18. Seed `0002_nexus_demo.sql` reproduzível
+### MVP funcional (ALTA prioridade)
+
+8. **"Novo pedido" wizard** — botão hoje desabilitado em `src/modules/orders/pages/OrdersListPage.jsx:138`. Desbloqueia o fluxo de vendas end-to-end. Maior unlock de produto.
+9. **Página de Auditoria** consumindo `audit_logs` (criar `src/modules/audit/` com listagem + filtros por usuário/tabela/ação).
+10. **Top produtos no Reports vindo do `order_items` real** — atualmente `Math.random()` em `src/modules/reports/pages/ReportsPage.jsx:86-96`. Query agregada simples.
+11. **Realtime nas notificações** via Supabase Realtime (sino atualiza sem reload quando chega notificação nova).
+
+### Melhorias de produto (MÉDIA prioridade)
+
+12. **Editor granular de permissões (Roles)** — `src/modules/roles/pages/RolesListPage.jsx:69` diz "chega na próxima iteração".
+13. **Upload de imagens de produtos** — campo `images` existe no schema; falta criar bucket no Supabase Storage + policies + componente de upload. Combinar com #14.
+14. **Upload de avatar do user + logo da empresa** — Storage. Agrupar com #13 pra configurar Storage uma única vez.
+15. **Convite real de membros** — hoje mockado em `teamRepository.inviteMember` (lança erro se não estiver em demo). Depende de Edge Function + SMTP (#1).
+16. **Switch de empresa quando user tem 2+** — chamar `authRepository.switchCompany(id)` a partir de um dropdown no Topbar.
+17. **Export em outras páginas** (Pedidos, Financeiro, Inventário) reusando `src/lib/exporters.js`.
+18. **Reports: DRE simplificado + fluxo de caixa mensal.**
+
+### Hardening / Segurança / LGPD
+
+19. **Refinar RLS de `companies` pra exigir `has_permission('settings.update')` no UPDATE** — hoje qualquer membro ativo pode editar via DB. Gate de front já cobre o uso normal; refinar pra fechar a defense-in-depth (flagged no spec `docs/superpowers/specs/2026-05-28-edit-profile-company-design.md`).
+20. **Páginas reais de Termos de Uso e Política de Privacidade** — signup linka pra `#` hoje (`SignupPage.jsx:119-126`). Obrigatório pra LGPD.
+21. **Exportar dados pessoais do usuário** (direito de portabilidade LGPD Art. 18). Edge Function que devolve JSON com tudo do user.
+22. **Audit log entries** para signup, login/logout, edição de empresa, exclusão de conta — verificar se as migrations 0003 já cobrem ou se falta trigger.
+23. **Sentry (ou similar) pra error monitoring em produção** — hoje erros do front só vão pro console do browser.
+24. **Rate limit visível na UX** — Supabase aplica internamente, mas não há mensagem amigável no front quando o user é bloqueado por excesso de tentativas.
+
+### Infra / DX (BAIXA prioridade)
+
+25. **Deploy Vercel** (produção + preview por PR).
+26. **CI no GitHub Actions** — rodar `lint + test + build` em todo PR.
+27. **Cobertura de testes** — hoje 35 unit tests (validações). Faltam testes de componentes (RTL já instalado) e e2e (Cypress configurado mas vazio — `cypress/e2e/smoke.cy.js` é o único e é só smoke).
+28. **Remover demo mode** (`VITE_DEMO_MODE`, `src/app/demoMode.js`, `src/app/demoFixtures.js`) — já não é necessário rodando com Supabase real.
+29. **Seed `0002_nexus_demo.sql` reproduzível** — atualmente o seed da Nexus não está commitado de forma idempotente; recriar o ambiente do zero é manual.
+30. **PWA manifest + service worker** se o objetivo for "instalar como app no celular".
+31. **Auditoria de acessibilidade** (keyboard nav, contraste WCAG das duas paletas, ARIA nas tabelas).
+32. **i18n** — hoje PT-BR hardcoded. Não é urgente, mas se for atender empresas multi-país, levantar antes que vire dívida grande.
 
 ## VERIFICAÇÕES DE SANIDADE
 
@@ -67,6 +103,10 @@ Sou Cielio Queiroz (cielioqueiroz@hotmail.com). Estou construindo o **Aurora ERP
 
 ## PRÓXIMO PASSO SUGERIDO
 
-Comece perguntando qual pendência atacar primeiro. Recomendo o item 1 (Novo pedido) porque desbloqueia o fluxo de vendas end-to-end. Alternativa rápida: itens 3 (top produtos reais no Reports) ou 4 (Realtime nas notificações).
+Comece perguntando qual pendência atacar primeiro. Recomendações:
+
+- **Quer abrir cadastro pra terceiros?** comece pelos itens 1–7 (Account lifecycle). #1 (SMTP) é pré-requisito de #2, #4 e #15.
+- **Quer fechar o MVP funcional?** item #8 (Novo pedido wizard) é o maior unlock.
+- **Tarefa rápida pra aquecer?** itens #10 (top produtos reais) ou #11 (Realtime).
 
 Antes de qualquer mudança, dê `git status` pra confirmar a árvore está limpa, e leia `README.md` na raiz pra entender a arquitetura completa.
