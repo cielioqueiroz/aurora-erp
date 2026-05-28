@@ -10,12 +10,7 @@ export const companyRepository = {
       phone: payload.phone ? onlyDigits(payload.phone) : null,
     };
 
-    const res = await supabase
-      .from('companies')
-      .update(normalized)
-      .eq('id', id)
-      .select()
-      .single();
+    const res = await supabase.from('companies').update(normalized).eq('id', id).select().single();
 
     if (res.error) throw toAppError(res.error);
     return res.data;

@@ -73,19 +73,13 @@ export function CompanyCard() {
               <Input defaultValue={company.name ?? ''} readOnly />
             </FormField>
             <FormField label="CNPJ">
-              <Input
-                defaultValue={company.document ? formatCNPJ(company.document) : ''}
-                readOnly
-              />
+              <Input defaultValue={company.document ? formatCNPJ(company.document) : ''} readOnly />
             </FormField>
             <FormField label="E-mail">
               <Input defaultValue={company.email ?? ''} readOnly />
             </FormField>
             <FormField label="Telefone">
-              <Input
-                defaultValue={company.phone ? formatPhone(company.phone) : ''}
-                readOnly
-              />
+              <Input defaultValue={company.phone ? formatPhone(company.phone) : ''} readOnly />
             </FormField>
           </div>
         )}

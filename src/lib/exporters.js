@@ -184,7 +184,9 @@ export async function exportPDF(report) {
         const isPositive = !kpi.delta.startsWith('-') && kpi.delta !== '0,0%' && kpi.delta !== '—';
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(8);
-        doc.setTextColor(...(kpi.delta === '—' ? MUTED_RGB : isPositive ? SUCCESS_RGB : DANGER_RGB));
+        doc.setTextColor(
+          ...(kpi.delta === '—' ? MUTED_RGB : isPositive ? SUCCESS_RGB : DANGER_RGB),
+        );
         doc.text(kpi.delta, x + 10, y + 56);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(...MUTED_RGB);
@@ -423,9 +425,7 @@ export async function exportWord(report) {
       section.rows.forEach((r) => {
         rows.push(new TableRow({ children: r.map((v) => cell(v)) }));
       });
-      sectionBlocks.push(
-        new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE } }),
-      );
+      sectionBlocks.push(new Table({ rows, width: { size: 100, type: WidthType.PERCENTAGE } }));
     }
     if (section.summary?.length) {
       sectionBlocks.push(new Paragraph({ text: '', spacing: { before: 80 } }));

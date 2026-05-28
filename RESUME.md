@@ -44,6 +44,7 @@ Sou Cielio Queiroz (cielioqueiroz@hotmail.com). Estou construindo o **Aurora ERP
 ## PENDÊNCIAS PRIORIZADAS
 
 **ALTA prioridade (fechar MVP):**
+
 1. "Novo pedido" wizard — atualmente botão desabilitado em `src/modules/orders/pages/OrdersListPage.jsx:138`
 2. Editar perfil (nome/avatar) em `src/modules/settings/pages/SettingsPage.jsx:82`
 3. Editar dados da empresa em `src/modules/settings/pages/SettingsPage.jsx:113`
@@ -51,21 +52,9 @@ Sou Cielio Queiroz (cielioqueiroz@hotmail.com). Estou construindo o **Aurora ERP
 5. Top produtos no Reports vindo do `order_items` real (atualmente `Math.random()` em `src/modules/reports/pages/ReportsPage.jsx:86-96`)
 6. Realtime nas notificações via Supabase Realtime
 
-**MÉDIA prioridade:**
-7. Editor granular de permissões (Roles) — `src/modules/roles/pages/RolesListPage.jsx:69` diz "chega na próxima iteração"
-8. Upload de imagens de produtos (Supabase Storage) — campo `images` existe no schema
-9. Convite real de membros (atualmente mockado)
-10. Switch de empresa quando user tem 2+
-11. Export em outras páginas (Pedidos, Financeiro, Inventário) — usar `src/lib/exporters.js`
-12. Reports: DRE simplificado + fluxo de caixa mensal
+**MÉDIA prioridade:** 7. Editor granular de permissões (Roles) — `src/modules/roles/pages/RolesListPage.jsx:69` diz "chega na próxima iteração" 8. Upload de imagens de produtos (Supabase Storage) — campo `images` existe no schema 9. Convite real de membros (atualmente mockado) 10. Switch de empresa quando user tem 2+ 11. Export em outras páginas (Pedidos, Financeiro, Inventário) — usar `src/lib/exporters.js` 12. Reports: DRE simplificado + fluxo de caixa mensal
 
-**BAIXA prioridade / Infra:**
-13. Deploy Vercel
-14. CI no GitHub Actions
-15. SMTP (Auth > Email confirmation está OFF agora)
-16. Cobertura de testes
-17. Remover demo mode (já não é necessário)
-18. Seed `0002_nexus_demo.sql` reproduzível
+**BAIXA prioridade / Infra:** 13. Deploy Vercel 14. CI no GitHub Actions 15. SMTP (Auth > Email confirmation está OFF agora) 16. Cobertura de testes 17. Remover demo mode (já não é necessário) 18. Seed `0002_nexus_demo.sql` reproduzível
 
 ## VERIFICAÇÕES DE SANIDADE
 

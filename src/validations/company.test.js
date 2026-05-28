@@ -32,9 +32,9 @@ describe('companySchema', () => {
   });
 
   it('rejeita CNPJ inválido', () => {
-    expect(() =>
-      companySchema.parse({ name: 'Nexus', document: '11.111.111/1111-11' }),
-    ).toThrow(/CNPJ inválido/);
+    expect(() => companySchema.parse({ name: 'Nexus', document: '11.111.111/1111-11' })).toThrow(
+      /CNPJ inválido/,
+    );
   });
 
   it('rejeita email malformado', () => {
@@ -54,9 +54,7 @@ describe('companySchema', () => {
   });
 
   it('rejeita telefone inválido', () => {
-    expect(() => companySchema.parse({ name: 'Nexus', phone: '123' })).toThrow(
-      /Telefone inválido/,
-    );
+    expect(() => companySchema.parse({ name: 'Nexus', phone: '123' })).toThrow(/Telefone inválido/);
   });
 
   it('converte telefone vazio em null', () => {

@@ -30,18 +30,15 @@ export function CompanyForm({ defaultValues, loading, onCancel, onSubmit }) {
           required
           className="sm:col-span-2"
         >
-          <Input
-            placeholder="Ex: Nexus LTDA"
-            autoFocus
-            disabled={loading}
-            {...register('name')}
-          />
+          <Input placeholder="Ex: Nexus LTDA" autoFocus disabled={loading} {...register('name')} />
         </FormField>
 
         <FormField label="CNPJ" error={errors.document?.message}>
           <Input
             value={formatCNPJ(docValue)}
-            onChange={(e) => setValue('document', e.target.value, { shouldValidate: true, shouldDirty: true })}
+            onChange={(e) =>
+              setValue('document', e.target.value, { shouldValidate: true, shouldDirty: true })
+            }
             placeholder="00.000.000/0000-00"
             inputMode="numeric"
             disabled={loading}
@@ -60,7 +57,9 @@ export function CompanyForm({ defaultValues, loading, onCancel, onSubmit }) {
         <FormField label="Telefone" error={errors.phone?.message}>
           <Input
             value={formatPhone(phoneValue)}
-            onChange={(e) => setValue('phone', e.target.value, { shouldValidate: true, shouldDirty: true })}
+            onChange={(e) =>
+              setValue('phone', e.target.value, { shouldValidate: true, shouldDirty: true })
+            }
             placeholder="(11) 99999-9999"
             inputMode="tel"
             disabled={loading}

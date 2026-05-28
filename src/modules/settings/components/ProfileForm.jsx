@@ -40,10 +40,7 @@ export function ProfileForm({ defaultValues, email, loading, onCancel, onSubmit 
             {...register('full_name')}
           />
         </FormField>
-        <FormField
-          label="E-mail"
-          description="A mudança de e-mail será adicionada em breve."
-        >
+        <FormField label="E-mail" description="A mudança de e-mail será adicionada em breve.">
           <Input value={email ?? ''} readOnly disabled />
         </FormField>
       </div>
