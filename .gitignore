@@ -19,6 +19,7 @@ lerna-debug.log*
 *.sln
 *.sw?
 Thumbs.db
+.history
 
 # Build
 node_modules
@@ -27,17 +28,19 @@ dist-ssr
 *.local
 build
 coverage
+.vite
+.vitest
 
 # Test
 cypress/videos
 cypress/screenshots
 cypress/downloads
+cypress/results
 .nyc_output
 
-# Env
+# Env (qualquer .env* exceto o template público)
 .env
-.env.local
-.env.*.local
+.env.*
 !.env.example
 
 # Supabase
@@ -51,6 +54,8 @@ supabase/.temp
 .eslintcache
 .stylelintcache
 *.tsbuildinfo
+tmp
+temp
 
 # Husky
 .husky/_
