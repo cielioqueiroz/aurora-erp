@@ -63,7 +63,6 @@ export function ReportsPage() {
   const finance = useMemo(() => financeResult?.data ?? [], [financeResult?.data]);
   const products = useMemo(() => productsResult?.data ?? [], [productsResult?.data]);
 
-  // Receita por dia (últimos 30 dias)
   const revenueByDay = useMemo(() => {
     const map = {};
     for (let i = 29; i >= 0; i -= 1) {
@@ -82,7 +81,6 @@ export function ReportsPage() {
     return Object.values(map);
   }, [orders]);
 
-  // Top produtos (por quantidade nos pedidos demo — usamos preço × pedidos como proxy)
   const topProducts = useMemo(() => {
     const sample = [...products]
       .sort((a, b) => Number(b.price ?? 0) - Number(a.price ?? 0))
@@ -95,12 +93,12 @@ export function ReportsPage() {
     return sample;
   }, [products]);
 
-  // Distribuição financeiro
   const financePieData = useMemo(() => {
     const buckets = {};
     for (const tx of finance) {
       if (tx.status === 'cancelled' || tx.status === 'paid') continue;
-      buckets[tx.category ?? 'Outros'] = (buckets[tx.category ?? 'Outros'] ?? 0) + Number(tx.amount);
+      buckets[tx.category ?? 'Outros'] =
+        (buckets[tx.category ?? 'Outros'] ?? 0) + Number(tx.amount);
     }
     return Object.entries(buckets).map(([name, value]) => ({ name, value }));
   }, [finance]);
@@ -140,9 +138,7 @@ export function ReportsPage() {
             <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Pedidos 30d
             </p>
-            <p className="mt-2 text-2xl font-semibold tabular-nums">
-              {formatInteger(totalOrders)}
-            </p>
+            <p className="mt-2 text-2xl font-semibold tabular-nums">{formatInteger(totalOrders)}</p>
           </CardContent>
         </Card>
         <Card>
@@ -150,9 +146,7 @@ export function ReportsPage() {
             <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               Ticket médio
             </p>
-            <p className="mt-2 text-2xl font-semibold tabular-nums">
-              {formatCurrency(avgTicket)}
-            </p>
+            <p className="mt-2 text-2xl font-semibold tabular-nums">{formatCurrency(avgTicket)}</p>
           </CardContent>
         </Card>
       </div>
@@ -176,11 +170,36 @@ export function ReportsPage() {
                         <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                       </linearGradient>
                     </defs>
-                    <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />
-                    <XAxis dataKey="day" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} interval="preserveStartEnd" />
-                    <YAxis tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} tickFormatter={(v) => `${Math.round(v / 1000)}k`} />
-                    <ReTooltip content={<ChartTooltip currency />} cursor={{ stroke: 'hsl(var(--border))' }} />
-                    <Area type="monotone" dataKey="receita" name="Receita" stroke="hsl(var(--primary))" fill="url(#rep-receita)" strokeWidth={2} />
+                    <CartesianGrid
+                      stroke="hsl(var(--border))"
+                      strokeDasharray="3 3"
+                      vertical={false}
+                    />
+                    <XAxis
+                      dataKey="day"
+                      tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                      axisLine={false}
+                      tickLine={false}
+                      interval="preserveStartEnd"
+                    />
+                    <YAxis
+                      tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                      axisLine={false}
+                      tickLine={false}
+                      tickFormatter={(v) => `${Math.round(v / 1000)}k`}
+                    />
+                    <ReTooltip
+                      content={<ChartTooltip currency />}
+                      cursor={{ stroke: 'hsl(var(--border))' }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="receita"
+                      name="Receita"
+                      stroke="hsl(var(--primary))"
+                      fill="url(#rep-receita)"
+                      strokeWidth={2}
+                    />
                   </AreaChart>
                 </ResponsiveContainer>
               )}
@@ -196,12 +215,36 @@ export function ReportsPage() {
           <CardContent>
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={topProducts} layout="vertical" margin={{ left: 0, right: 8, top: 4, bottom: 0 }}>
-                  <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" horizontal={false} />
+                <BarChart
+                  data={topProducts}
+                  layout="vertical"
+                  margin={{ left: 0, right: 8, top: 4, bottom: 0 }}
+                >
+                  <CartesianGrid
+                    stroke="hsl(var(--border))"
+                    strokeDasharray="3 3"
+                    horizontal={false}
+                  />
                   <XAxis type="number" hide />
-                  <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} width={120} />
-                  <ReTooltip content={<ChartTooltip currency />} cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }} />
-                  <Bar dataKey="receita" name="Receita" fill="hsl(var(--accent))" radius={[0, 6, 6, 0]} barSize={20} />
+                  <YAxis
+                    type="category"
+                    dataKey="name"
+                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    axisLine={false}
+                    tickLine={false}
+                    width={120}
+                  />
+                  <ReTooltip
+                    content={<ChartTooltip currency />}
+                    cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }}
+                  />
+                  <Bar
+                    dataKey="receita"
+                    name="Receita"
+                    fill="hsl(var(--accent))"
+                    radius={[0, 6, 6, 0]}
+                    barSize={20}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -219,11 +262,33 @@ export function ReportsPage() {
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={revenueByDay}>
-                  <CartesianGrid stroke="hsl(var(--border))" strokeDasharray="3 3" vertical={false} />
-                  <XAxis dataKey="day" tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} interval="preserveStartEnd" />
-                  <YAxis tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} />
-                  <ReTooltip content={<ChartTooltip />} cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }} />
-                  <Bar dataKey="pedidos" name="Pedidos" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <CartesianGrid
+                    stroke="hsl(var(--border))"
+                    strokeDasharray="3 3"
+                    vertical={false}
+                  />
+                  <XAxis
+                    dataKey="day"
+                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    axisLine={false}
+                    tickLine={false}
+                    interval="preserveStartEnd"
+                  />
+                  <YAxis
+                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    axisLine={false}
+                    tickLine={false}
+                  />
+                  <ReTooltip
+                    content={<ChartTooltip />}
+                    cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }}
+                  />
+                  <Bar
+                    dataKey="pedidos"
+                    name="Pedidos"
+                    fill="hsl(var(--primary))"
+                    radius={[4, 4, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -249,6 +314,7 @@ export function ReportsPage() {
                       wrapperStyle={{ fontSize: 12, color: 'hsl(var(--muted-foreground))' }}
                       iconType="circle"
                     />
+
                     <Pie
                       data={financePieData}
                       dataKey="value"

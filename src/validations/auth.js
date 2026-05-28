@@ -37,7 +37,9 @@ export const signupAccountSchema = z
       .regex(/[a-z]/, 'Inclua uma letra minúscula')
       .regex(/[0-9]/, 'Inclua um número'),
     confirm: z.string(),
-    acceptTerms: z.literal(true, { errorMap: () => ({ message: 'Aceite os termos para continuar' }) }),
+    acceptTerms: z.literal(true, {
+      errorMap: () => ({ message: 'Aceite os termos para continuar' }),
+    }),
   })
   .refine((data) => data.password === data.confirm, {
     message: 'As senhas não conferem',

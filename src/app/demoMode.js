@@ -1,14 +1,5 @@
 import { ALL_PERMISSIONS } from '@/constants/permissions';
 
-/**
- * Modo demo — quando ligado via VITE_DEMO_MODE=true, o app:
- *  - pula bootstrap do Supabase
- *  - injeta sessão/usuário/empresa/permissions fake no authStore
- *  - permite navegar todas as telas sem precisar fazer signup
- *
- * Útil para apresentação visual / preview de UI sem backend real.
- * NUNCA habilite em produção.
- */
 export const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true';
 
 const DEMO_COMPANY_ID = '00000000-aaaa-aaaa-aaaa-000000000001';

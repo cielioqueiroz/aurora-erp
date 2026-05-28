@@ -1,5 +1,13 @@
 import { NavLink, Link } from 'react-router-dom';
-import { ChevronsLeft, ChevronsRight, Sparkles, LogOut, Settings, Building2, Check } from 'lucide-react';
+import {
+  ChevronsLeft,
+  ChevronsRight,
+  Sparkles,
+  LogOut,
+  Settings,
+  Building2,
+  Check,
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NAV_MODULES } from '@/constants/modules';
 import { ROUTES } from '@/constants/routes';
@@ -49,6 +57,7 @@ function ModuleLink({ item, collapsed }) {
               isActive ? 'text-primary' : 'text-muted-foreground group-hover:text-foreground',
             )}
           />
+
           {!collapsed && <span className="truncate">{item.label}</span>}
           {!collapsed && isActive && (
             <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
@@ -115,9 +124,7 @@ function CompanySwitcher({ collapsed }) {
         <DropdownMenuLabel>Empresas</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {companies.length === 0 ? (
-          <div className="px-3 py-2 text-xs text-muted-foreground">
-            Nenhuma empresa vinculada
-          </div>
+          <div className="px-3 py-2 text-xs text-muted-foreground">Nenhuma empresa vinculada</div>
         ) : (
           companies.map((c) => (
             <DropdownMenuItem key={c.id} onSelect={() => handleSwitch(c.id)}>
@@ -141,8 +148,7 @@ function CompanySwitcher({ collapsed }) {
 
 function UserMenu({ collapsed }) {
   const user = useAuthStore((s) => s.user);
-  const displayName =
-    user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'Usuário';
+  const displayName = user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'Usuário';
   const email = user?.email ?? '';
 
   const handleSignOut = async () => {
@@ -187,7 +193,10 @@ function UserMenu({ collapsed }) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={handleSignOut} className="text-destructive focus:text-destructive">
+        <DropdownMenuItem
+          onSelect={handleSignOut}
+          className="text-destructive focus:text-destructive"
+        >
           <LogOut className="h-4 w-4" /> Sair
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -205,7 +214,7 @@ export function Sidebar() {
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
       className="surface-sidebar relative flex h-screen flex-col border-r"
     >
-      {/* Brand */}
+      {}
       <div
         className={cn(
           'flex h-16 items-center border-b border-[hsl(var(--sidebar-border))] px-4',
@@ -231,12 +240,12 @@ export function Sidebar() {
         </Link>
       </div>
 
-      {/* Company switcher */}
+      {}
       <div className="border-b border-[hsl(var(--sidebar-border))] p-2">
         <CompanySwitcher collapsed={collapsed} />
       </div>
 
-      {/* Modules */}
+      {}
       <ScrollArea className="flex-1">
         <nav className="space-y-4 p-2">
           {NAV_MODULES.map((group) => (
@@ -256,12 +265,12 @@ export function Sidebar() {
         </nav>
       </ScrollArea>
 
-      {/* User menu */}
+      {}
       <div className="border-t border-[hsl(var(--sidebar-border))] p-2">
         <UserMenu collapsed={collapsed} />
       </div>
 
-      {/* Collapse toggle */}
+      {}
       <Button
         size="icon-sm"
         variant="outline"

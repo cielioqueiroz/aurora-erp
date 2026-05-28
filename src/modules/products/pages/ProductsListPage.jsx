@@ -51,7 +51,7 @@ export function ProductsListPage() {
   const categories = useMemo(() => categoriesResult?.data ?? [], [categoriesResult?.data]);
   const categoryName = useMemo(() => {
     const map = Object.fromEntries(categories.map((c) => [c.id, c.name]));
-    return (id) => (id ? map[id] ?? '—' : '—');
+    return (id) => (id ? (map[id] ?? '—') : '—');
   }, [categories]);
 
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -59,15 +59,25 @@ export function ProductsListPage() {
   const [deleting, setDeleting] = useState(null);
 
   const createMutation = productsHooks.useCreate({
-    onSuccess: () => { toast.success('Produto criado'); setSheetOpen(false); },
+    onSuccess: () => {
+      toast.success('Produto criado');
+      setSheetOpen(false);
+    },
     onError: (err) => toast.error(err.message ?? 'Erro ao criar'),
   });
   const updateMutation = productsHooks.useUpdate({
-    onSuccess: () => { toast.success('Produto atualizado'); setSheetOpen(false); setEditing(null); },
+    onSuccess: () => {
+      toast.success('Produto atualizado');
+      setSheetOpen(false);
+      setEditing(null);
+    },
     onError: (err) => toast.error(err.message ?? 'Erro ao atualizar'),
   });
   const deleteMutation = productsHooks.useDelete({
-    onSuccess: () => { toast.success('Produto excluído'); setDeleting(null); },
+    onSuccess: () => {
+      toast.success('Produto excluído');
+      setDeleting(null);
+    },
     onError: (err) => toast.error(err.message ?? 'Erro ao excluir'),
   });
 
@@ -84,8 +94,11 @@ export function ProductsListPage() {
         header: 'SKU',
         meta: { sortable: true },
         cell: ({ getValue }) => (
-          <span className="font-mono text-xs tabular-nums text-muted-foreground">{getValue() ?? '—'}</span>
+          <span className="font-mono text-xs tabular-nums text-muted-foreground">
+            {getValue() ?? '—'}
+          </span>
         ),
+
         size: 110,
       },
       {
@@ -96,7 +109,9 @@ export function ProductsListPage() {
         cell: ({ row }) => (
           <div className="min-w-0">
             <p className="truncate font-medium">{row.original.name}</p>
-            <p className="truncate text-xs text-muted-foreground">{categoryName(row.original.category_id)}</p>
+            <p className="truncate text-xs text-muted-foreground">
+              {categoryName(row.original.category_id)}
+            </p>
           </div>
         ),
       },
@@ -109,26 +124,37 @@ export function ProductsListPage() {
         accessorKey: 'is_active',
         header: 'Status',
         cell: ({ getValue }) => (
-          <Badge variant={getValue() ? 'success' : 'secondary'}>{getValue() ? 'Ativo' : 'Inativo'}</Badge>
+          <Badge variant={getValue() ? 'success' : 'secondary'}>
+            {getValue() ? 'Ativo' : 'Inativo'}
+          </Badge>
         ),
       },
       dateColumn({ id: 'created_at', header: 'Criado', accessor: 'created_at' }),
       actionsColumn((product) => (
         <RowActions>
           <Can permission={PERMISSIONS.PRODUCTS_UPDATE}>
-            <DropdownMenuItem onSelect={() => { setEditing(product); setSheetOpen(true); }}>
+            <DropdownMenuItem
+              onSelect={() => {
+                setEditing(product);
+                setSheetOpen(true);
+              }}
+            >
               <Pencil className="h-4 w-4" /> Editar
             </DropdownMenuItem>
           </Can>
           <Can permission={PERMISSIONS.PRODUCTS_DELETE}>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => setDeleting(product)} className="text-destructive focus:text-destructive">
+            <DropdownMenuItem
+              onSelect={() => setDeleting(product)}
+              className="text-destructive focus:text-destructive"
+            >
               <Trash2 className="h-4 w-4" /> Excluir
             </DropdownMenuItem>
           </Can>
         </RowActions>
       )),
     ],
+
     [categoryName],
   );
 
@@ -144,7 +170,12 @@ export function ProductsListPage() {
         description={`${total} produto${total === 1 ? '' : 's'} no catálogo`}
         actions={
           <Can permission={PERMISSIONS.PRODUCTS_CREATE}>
-            <Button onClick={() => { setEditing(null); setSheetOpen(true); }}>
+            <Button
+              onClick={() => {
+                setEditing(null);
+                setSheetOpen(true);
+              }}
+            >
               <Plus className="h-4 w-4" /> Novo produto
             </Button>
           </Can>
@@ -174,7 +205,10 @@ export function ProductsListPage() {
 
       <CrudSheet
         open={sheetOpen}
-        onOpenChange={(open) => { setSheetOpen(open); if (!open) setEditing(null); }}
+        onOpenChange={(open) => {
+          setSheetOpen(open);
+          if (!open) setEditing(null);
+        }}
         title={editing ? 'Editar produto' : 'Novo produto'}
         submitLabel={editing ? 'Salvar' : 'Criar produto'}
         loading={createMutation.isPending || updateMutation.isPending}

@@ -13,10 +13,6 @@ import {
 } from 'lucide-react';
 import { PERMISSIONS } from './permissions';
 
-/**
- * Catálogo de módulos para navegação.
- * `permission` é a permissão mínima de leitura.
- */
 export const NAV_MODULES = [
   {
     group: 'Visão geral',

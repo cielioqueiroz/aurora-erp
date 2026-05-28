@@ -9,23 +9,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/cn';
 
-/**
- * Slide-over padronizado para CRUD (criar/editar).
- *
- * <CrudSheet
- *   open={open}
- *   onOpenChange={setOpen}
- *   title={editing ? 'Editar cliente' : 'Novo cliente'}
- *   description="Preencha os dados abaixo."
- *   submitLabel={editing ? 'Salvar' : 'Criar'}
- *   loading={isSubmitting}
- *   onSubmit={handleSubmit}
- * >
- *   <form id="customer-form">...</form>
- * </CrudSheet>
- *
- * O `onSubmit` é disparado pelo botão; o conteúdo é o `<form>` controlado externamente.
- */
 export function CrudSheet({
   open,
   onOpenChange,

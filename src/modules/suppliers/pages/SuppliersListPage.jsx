@@ -24,29 +24,33 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { suppliersHooks } from '../hooks/useSuppliers';
 import { CustomerForm } from '@/modules/customers/components/CustomerForm';
 
-// Suppliers compartilham o mesmo schema visual de Customers — reaproveitamos o form.
-
 const STATUS_MAP = {
-  active:   { label: 'Ativo',     variant: 'success'  },
-  inactive: { label: 'Inativo',   variant: 'secondary'},
-  blocked:  { label: 'Bloqueado', variant: 'danger'   },
+  active: { label: 'Ativo', variant: 'success' },
+  inactive: { label: 'Inativo', variant: 'secondary' },
+  blocked: { label: 'Bloqueado', variant: 'danger' },
 };
 
 export function SuppliersListPage() {
   const [{ page, perPage, search, sort, asc }, setQueryStates] = useQueryStates(
     {
-      page:    parseAsInteger.withDefault(1),
+      page: parseAsInteger.withDefault(1),
       perPage: parseAsInteger.withDefault(20),
-      search:  parseAsString.withDefault(''),
-      sort:    parseAsString.withDefault('created_at'),
-      asc:     parseAsInteger.withDefault(0),
+      search: parseAsString.withDefault(''),
+      sort: parseAsString.withDefault('created_at'),
+      asc: parseAsInteger.withDefault(0),
     },
     { history: 'replace' },
   );
 
   const debouncedSearch = useDebounce(search, 300);
   const queryParams = useMemo(
-    () => ({ page, perPage, search: debouncedSearch, searchField: 'name', order: { field: sort, asc: asc === 1 } }),
+    () => ({
+      page,
+      perPage,
+      search: debouncedSearch,
+      searchField: 'name',
+      order: { field: sort, asc: asc === 1 },
+    }),
     [page, perPage, debouncedSearch, sort, asc],
   );
 
@@ -59,15 +63,25 @@ export function SuppliersListPage() {
   const [deleting, setDeleting] = useState(null);
 
   const createMutation = suppliersHooks.useCreate({
-    onSuccess: () => { toast.success('Fornecedor criado'); setSheetOpen(false); },
+    onSuccess: () => {
+      toast.success('Fornecedor criado');
+      setSheetOpen(false);
+    },
     onError: (err) => toast.error(err.message ?? 'Erro ao criar fornecedor'),
   });
   const updateMutation = suppliersHooks.useUpdate({
-    onSuccess: () => { toast.success('Fornecedor atualizado'); setSheetOpen(false); setEditing(null); },
+    onSuccess: () => {
+      toast.success('Fornecedor atualizado');
+      setSheetOpen(false);
+      setEditing(null);
+    },
     onError: (err) => toast.error(err.message ?? 'Erro ao atualizar'),
   });
   const deleteMutation = suppliersHooks.useDelete({
-    onSuccess: () => { toast.success('Fornecedor excluído'); setDeleting(null); },
+    onSuccess: () => {
+      toast.success('Fornecedor excluído');
+      setDeleting(null);
+    },
     onError: (err) => toast.error(err.message ?? 'Erro ao excluir'),
   });
 
@@ -80,25 +94,40 @@ export function SuppliersListPage() {
     () => [
       nameWithAvatarColumn({ subAccessor: 'email' }),
       documentColumn({}),
-      textColumn({ id: 'phone', header: 'Telefone', accessor: 'phone', muted: true, sortable: false }),
+      textColumn({
+        id: 'phone',
+        header: 'Telefone',
+        accessor: 'phone',
+        muted: true,
+        sortable: false,
+      }),
       statusColumn({ map: STATUS_MAP }),
       dateColumn({ id: 'created_at', header: 'Criado em', accessor: 'created_at' }),
       actionsColumn((supplier) => (
         <RowActions>
           <Can permission={PERMISSIONS.SUPPLIERS_UPDATE}>
-            <DropdownMenuItem onSelect={() => { setEditing(supplier); setSheetOpen(true); }}>
+            <DropdownMenuItem
+              onSelect={() => {
+                setEditing(supplier);
+                setSheetOpen(true);
+              }}
+            >
               <Pencil className="h-4 w-4" /> Editar
             </DropdownMenuItem>
           </Can>
           <Can permission={PERMISSIONS.SUPPLIERS_DELETE}>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={() => setDeleting(supplier)} className="text-destructive focus:text-destructive">
+            <DropdownMenuItem
+              onSelect={() => setDeleting(supplier)}
+              className="text-destructive focus:text-destructive"
+            >
               <Trash2 className="h-4 w-4" /> Excluir
             </DropdownMenuItem>
           </Can>
         </RowActions>
       )),
     ],
+
     [],
   );
 
@@ -114,7 +143,12 @@ export function SuppliersListPage() {
         description={`${total} fornecedor${total === 1 ? '' : 'es'} cadastrado${total === 1 ? '' : 's'}`}
         actions={
           <Can permission={PERMISSIONS.SUPPLIERS_CREATE}>
-            <Button onClick={() => { setEditing(null); setSheetOpen(true); }}>
+            <Button
+              onClick={() => {
+                setEditing(null);
+                setSheetOpen(true);
+              }}
+            >
               <Plus className="h-4 w-4" /> Novo fornecedor
             </Button>
           </Can>
@@ -144,14 +178,21 @@ export function SuppliersListPage() {
 
       <CrudSheet
         open={sheetOpen}
-        onOpenChange={(open) => { setSheetOpen(open); if (!open) setEditing(null); }}
+        onOpenChange={(open) => {
+          setSheetOpen(open);
+          if (!open) setEditing(null);
+        }}
         title={editing ? 'Editar fornecedor' : 'Novo fornecedor'}
         submitLabel={editing ? 'Salvar' : 'Criar fornecedor'}
         loading={createMutation.isPending || updateMutation.isPending}
         onSubmit={() => document.getElementById('supplier-form')?.requestSubmit()}
         size="lg"
       >
-        <CustomerForm formId="supplier-form" defaultValues={editing ?? undefined} onSubmit={handleSubmit} />
+        <CustomerForm
+          formId="supplier-form"
+          defaultValues={editing ?? undefined}
+          onSubmit={handleSubmit}
+        />
       </CrudSheet>
 
       <ConfirmDialog

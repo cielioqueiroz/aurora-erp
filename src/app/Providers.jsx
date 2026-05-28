@@ -9,7 +9,6 @@ import { queryClient } from './queryClient';
 import { AuthBootstrap } from './AuthBootstrap';
 
 function ThemeBoot({ children }) {
-  // Garante que useTheme rode no topo da árvore para aplicar a classe `.dark`.
   useTheme();
   return children;
 }

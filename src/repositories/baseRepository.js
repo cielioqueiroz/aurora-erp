@@ -3,16 +3,6 @@ import { unwrap } from '@/integrations/supabase/errors';
 import { isDemoMode } from '@/app/demoMode';
 import { applyMutation, paginateInMemory } from '@/app/demoFixtures';
 
-/**
- * BaseRepository — abstração CRUD genérica sobre Supabase + suporte a modo demo.
- *
- * - Em produção/dev real: usa o cliente Supabase. RLS isola por company_id.
- * - Em modo demo (VITE_DEMO_MODE=true): opera contra um array fixture em memória.
- *
- * Convenções:
- *  - Soft delete via update `deleted_at = now()`.
- *  - Listagens padrão filtram `deleted_at is null`.
- */
 export function createRepository(tableName, { softDelete = true, demoStore } = {}) {
   const baseSelect = '*';
 

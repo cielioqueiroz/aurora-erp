@@ -7,7 +7,7 @@ async function listTeamMembers(params = {}) {
   if (isDemoMode) {
     return paginateInMemory(demoTeamMembers, { ...params, searchField: 'full_name' });
   }
-  // Real: view auxiliar — pendente. Por ora retorna vazio.
+
   const { data, error } = await supabase
     .from('user_companies')
     .select('user_id, status, joined_at, role:role_id(name, description)')
@@ -35,7 +35,7 @@ async function inviteMember({ email, role_id }) {
       joined_at: new Date().toISOString(),
     });
   }
-  // Real: usaria edge function para enviar convite via Supabase Auth admin
+
   throw new Error('Convite por e-mail requer Edge Function configurada.');
 }
 

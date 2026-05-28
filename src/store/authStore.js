@@ -1,12 +1,7 @@
 import { create } from 'zustand';
 
-/**
- * authStore — sessão + permissões + empresa ativa.
- * Carregado por `useAuthBootstrap` (em app/providers) e sincronizado com
- * `onAuthStateChange` do Supabase.
- */
 export const useAuthStore = create((set, get) => ({
-  status: 'loading', // 'loading' | 'authenticated' | 'unauthenticated'
+  status: 'loading',
   session: null,
   user: null,
   companies: [],
@@ -18,8 +13,7 @@ export const useAuthStore = create((set, get) => ({
       session,
       user: session?.user ?? null,
       status: session ? 'authenticated' : 'unauthenticated',
-      currentCompanyId:
-        session?.user?.app_metadata?.current_company_id ?? get().currentCompanyId,
+      currentCompanyId: session?.user?.app_metadata?.current_company_id ?? get().currentCompanyId,
     }),
 
   setStatus: (status) => set({ status }),
@@ -38,6 +32,5 @@ export const useAuthStore = create((set, get) => ({
     }),
 }));
 
-/** Seletor: empresa ativa (objeto). */
 export const useCurrentCompany = () =>
   useAuthStore((s) => s.companies.find((c) => c.id === s.currentCompanyId) ?? null);

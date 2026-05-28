@@ -19,7 +19,7 @@ import { cn } from '@/lib/cn';
 const STEPS = [
   { key: 'account', label: 'Conta', icon: User },
   { key: 'company', label: 'Empresa', icon: Building2 },
-  { key: 'done',    label: 'Pronto',  icon: Check },
+  { key: 'done', label: 'Pronto', icon: Check },
 ];
 
 function Stepper({ current }) {
@@ -96,7 +96,12 @@ function AccountStep({ onNext }) {
       <FormField label="E-mail" error={errors.email?.message} required>
         <Input type="email" placeholder="voce@empresa.com.br" {...register('email')} />
       </FormField>
-      <FormField label="Senha" error={errors.password?.message} required description="Mínimo 8 caracteres, com maiúscula, minúscula e número.">
+      <FormField
+        label="Senha"
+        error={errors.password?.message}
+        required
+        description="Mínimo 8 caracteres, com maiúscula, minúscula e número."
+      >
         <Input type="password" {...register('password')} />
       </FormField>
       <FormField label="Confirmar senha" error={errors.confirm?.message} required>
@@ -108,17 +113,29 @@ function AccountStep({ onNext }) {
           {...register('acceptTerms')}
           className="mt-0.5 h-4 w-4 rounded border-input text-primary focus:ring-ring"
         />
+
         <span>
-          Concordo com os <a className="underline" href="#">Termos</a> e a{' '}
-          <a className="underline" href="#">Política de Privacidade</a>.
+          Concordo com os{' '}
+          <a className="underline" href="#">
+            Termos
+          </a>{' '}
+          e a{' '}
+          <a className="underline" href="#">
+            Política de Privacidade
+          </a>
+          .
         </span>
       </label>
       {errors.acceptTerms && (
         <p className="text-xs text-destructive">{errors.acceptTerms.message}</p>
       )}
       <Button type="submit" size="lg" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-          <>Continuar <ArrowRight className="h-4 w-4" /></>
+        {isSubmitting ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <>
+            Continuar <ArrowRight className="h-4 w-4" />
+          </>
         )}
       </Button>
     </form>
@@ -159,7 +176,11 @@ function CompanyStep({ onBack, onDone }) {
       <FormField label="Nome da empresa" error={errors.name?.message} required>
         <Input placeholder="Ex: Aurora Comércio Ltda" {...register('name')} />
       </FormField>
-      <FormField label="CNPJ" error={errors.document?.message} description="Opcional, mas recomendado para emissão futura de notas.">
+      <FormField
+        label="CNPJ"
+        error={errors.document?.message}
+        description="Opcional, mas recomendado para emissão futura de notas."
+      >
         <Input
           value={formatCNPJ(docValue ?? '')}
           onChange={(e) => setValue('document', e.target.value, { shouldValidate: true })}
@@ -180,8 +201,12 @@ function CompanyStep({ onBack, onDone }) {
           <ArrowLeft className="h-4 w-4" /> Voltar
         </Button>
         <Button type="submit" size="lg" className="flex-1" disabled={isSubmitting}>
-          {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : (
-            <>Criar empresa <ArrowRight className="h-4 w-4" /></>
+          {isSubmitting ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <>
+              Criar empresa <ArrowRight className="h-4 w-4" />
+            </>
           )}
         </Button>
       </div>
@@ -212,8 +237,6 @@ export function SignupPage() {
   const hasCompanies = useAuthStore((s) => s.companies.length > 0);
   const [step, setStep] = useState(isAuthenticated && !hasCompanies ? 1 : 0);
 
-  // Se a sessão for resolvida depois da montagem (autenticado sem empresa),
-  // pula direto para o passo "empresa" ao invés de pedir login de novo.
   useEffect(() => {
     if (isAuthenticated && !hasCompanies && step === 0) setStep(1);
   }, [isAuthenticated, hasCompanies, step]);

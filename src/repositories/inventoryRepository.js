@@ -8,11 +8,6 @@ const baseRepo = createRepository('inventory_movements', {
   softDelete: false,
 });
 
-/**
- * Saldo de estoque agregado por produto (in - out + adjust).
- * No Supabase real, idealmente isso vira uma view; aqui calculamos client-side
- * (em modo demo, ou via fallback até a view existir).
- */
 async function getStockBalance() {
   if (isDemoMode) {
     const balance = {};
@@ -29,7 +24,6 @@ async function getStockBalance() {
     }));
   }
 
-  // Em produção: agrega no SQL
   const { data, error } = await supabase
     .from('inventory_movements')
     .select('product_id, type, quantity')

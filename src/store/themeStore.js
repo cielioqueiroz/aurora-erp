@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-/** themeStore — light | dark | system. */
 export const useThemeStore = create(
   persist(
     (set) => ({

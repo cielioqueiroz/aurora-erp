@@ -57,9 +57,7 @@ export function RecoverPage() {
         <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-aurora-soft text-primary">
           <Mail className="h-6 w-6" />
         </div>
-        <h1 className="text-center text-2xl font-semibold tracking-tight">
-          Recuperar senha
-        </h1>
+        <h1 className="text-center text-2xl font-semibold tracking-tight">Recuperar senha</h1>
         <p className="text-center text-sm text-muted-foreground">
           Informe seu e-mail e enviaremos um link para redefinir sua senha.
         </p>

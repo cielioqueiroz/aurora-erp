@@ -70,10 +70,10 @@ export default {
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
       boxShadow: {
-        'card': '0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.06)',
+        card: '0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.06)',
         'card-hover': '0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
-        'soft': '0 2px 8px -2px rgb(0 0 0 / 0.06), 0 4px 16px -4px rgb(0 0 0 / 0.05)',
-        'glow': '0 0 0 1px hsl(var(--primary) / 0.1), 0 8px 24px -8px hsl(var(--primary) / 0.3)',
+        soft: '0 2px 8px -2px rgb(0 0 0 / 0.06), 0 4px 16px -4px rgb(0 0 0 / 0.05)',
+        glow: '0 0 0 1px hsl(var(--primary) / 0.1), 0 8px 24px -8px hsl(var(--primary) / 0.3)',
       },
       keyframes: {
         'accordion-down': {
@@ -96,7 +96,7 @@ export default {
           from: { transform: 'translateX(100%)' },
           to: { transform: 'translateX(0)' },
         },
-        'shimmer': {
+        shimmer: {
           from: { backgroundPosition: '0 0' },
           to: { backgroundPosition: '-200% 0' },
         },
@@ -107,12 +107,13 @@ export default {
         'fade-in': 'fade-in 0.15s ease-out',
         'fade-in-up': 'fade-in-up 0.2s ease-out',
         'slide-in-right': 'slide-in-right 0.2s ease-out',
-        'shimmer': 'shimmer 2s linear infinite',
+        shimmer: 'shimmer 2s linear infinite',
       },
       backgroundImage: {
-        'aurora': 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%)',
-        'aurora-soft': 'linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--accent) / 0.08) 100%)',
-        'grid': "url(\"data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 .5H39.5V40' fill='none' stroke='%23E5E7EB' stroke-opacity='.5'/%3E%3C/svg%3E\")",
+        aurora: 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%)',
+        'aurora-soft':
+          'linear-gradient(135deg, hsl(var(--primary) / 0.08) 0%, hsl(var(--accent) / 0.08) 100%)',
+        grid: "url(\"data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 .5H39.5V40' fill='none' stroke='%23E5E7EB' stroke-opacity='.5'/%3E%3C/svg%3E\")",
       },
     },
   },

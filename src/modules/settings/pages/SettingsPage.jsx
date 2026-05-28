@@ -20,7 +20,7 @@ function ThemeCard({ label, icon: Icon, active, onClick }) {
         'flex flex-col items-center gap-2 rounded-lg border p-4 text-sm transition-colors',
         active
           ? 'border-primary bg-aurora-soft text-primary'
-          : 'border-border bg-card hover:border-primary/40 hover:bg-aurora-soft/40',
+          : 'hover:bg-aurora-soft/40 border-border bg-card hover:border-primary/40',
       )}
     >
       <Icon className="h-5 w-5" />
@@ -106,10 +106,7 @@ export function SettingsPage() {
                   <Input defaultValue={company?.email ?? ''} readOnly />
                 </FormField>
                 <FormField label="Telefone">
-                  <Input
-                    defaultValue={company?.phone ? formatPhone(company.phone) : ''}
-                    readOnly
-                  />
+                  <Input defaultValue={company?.phone ? formatPhone(company.phone) : ''} readOnly />
                 </FormField>
               </div>
               <p className="text-xs text-muted-foreground">
@@ -123,13 +120,30 @@ export function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Aparência</CardTitle>
-              <CardDescription>Tema da interface (sincroniza entre dispositivos por usuário em breve).</CardDescription>
+              <CardDescription>
+                Tema da interface (sincroniza entre dispositivos por usuário em breve).
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-3 sm:max-w-md">
-                <ThemeCard label="Claro" icon={Sun} active={theme === 'light'} onClick={() => setTheme('light')} />
-                <ThemeCard label="Escuro" icon={Moon} active={theme === 'dark'} onClick={() => setTheme('dark')} />
-                <ThemeCard label="Sistema" icon={Palette} active={theme === 'system'} onClick={() => setTheme('system')} />
+                <ThemeCard
+                  label="Claro"
+                  icon={Sun}
+                  active={theme === 'light'}
+                  onClick={() => setTheme('light')}
+                />
+                <ThemeCard
+                  label="Escuro"
+                  icon={Moon}
+                  active={theme === 'dark'}
+                  onClick={() => setTheme('dark')}
+                />
+                <ThemeCard
+                  label="Sistema"
+                  icon={Palette}
+                  active={theme === 'system'}
+                  onClick={() => setTheme('system')}
+                />
               </div>
             </CardContent>
           </Card>

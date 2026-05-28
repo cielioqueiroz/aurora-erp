@@ -31,10 +31,6 @@ const emptyDefaults = {
   status: 'active',
 };
 
-/**
- * Formulário compartilhado entre criação e edição de cliente.
- * O envio é controlado externamente via `formId` (botão fora do form, no Sheet).
- */
 export function CustomerForm({ formId = 'customer-form', defaultValues, onSubmit }) {
   const form = useForm({
     resolver: zodResolver(customerSchema),
@@ -45,7 +41,13 @@ export function CustomerForm({ formId = 'customer-form', defaultValues, onSubmit
     form.reset({ ...emptyDefaults, ...defaultValues });
   }, [defaultValues, form]);
 
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = form;
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = form;
   const docValue = watch('document') ?? '';
   const phoneValue = watch('phone') ?? '';
   const cepValue = watch('address.zip') ?? '';
@@ -65,7 +67,12 @@ export function CustomerForm({ formId = 'customer-form', defaultValues, onSubmit
       noValidate
     >
       <div className="grid gap-4 sm:grid-cols-2">
-        <FormField label="Nome / Razão social" error={errors.name?.message} required className="sm:col-span-2">
+        <FormField
+          label="Nome / Razão social"
+          error={errors.name?.message}
+          required
+          className="sm:col-span-2"
+        >
           <Input placeholder="Ex: João da Silva" {...register('name')} />
         </FormField>
 

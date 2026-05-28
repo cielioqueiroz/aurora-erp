@@ -1,9 +1,15 @@
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { formatCurrency, formatDate, formatDateTime, formatDocument, formatInteger, getInitials } from '@/lib/formatters';
+import {
+  formatCurrency,
+  formatDate,
+  formatDateTime,
+  formatDocument,
+  formatInteger,
+  getInitials,
+} from '@/lib/formatters';
 import { cn } from '@/lib/cn';
 
-/** Texto simples + opção de muted */
 export const textColumn = ({ id, header, accessor, muted = false, sortable = true, size }) => ({
   id,
   accessorKey: accessor ?? id,
@@ -15,8 +21,12 @@ export const textColumn = ({ id, header, accessor, muted = false, sortable = tru
   ),
 });
 
-/** Nome com avatar de iniciais */
-export const nameWithAvatarColumn = ({ id = 'name', header = 'Nome', accessor = 'name', subAccessor }) => ({
+export const nameWithAvatarColumn = ({
+  id = 'name',
+  header = 'Nome',
+  accessor = 'name',
+  subAccessor,
+}) => ({
   id,
   accessorKey: accessor,
   header,
@@ -38,8 +48,11 @@ export const nameWithAvatarColumn = ({ id = 'name', header = 'Nome', accessor = 
   },
 });
 
-/** CPF/CNPJ formatado */
-export const documentColumn = ({ id = 'document', header = 'Documento', accessor = 'document' }) => ({
+export const documentColumn = ({
+  id = 'document',
+  header = 'Documento',
+  accessor = 'document',
+}) => ({
   id,
   accessorKey: accessor,
   header,
@@ -50,18 +63,16 @@ export const documentColumn = ({ id = 'document', header = 'Documento', accessor
   ),
 });
 
-/** Moeda BRL */
 export const currencyColumn = ({ id, header, accessor, sortable = true }) => ({
   id,
   accessorKey: accessor ?? id,
   header,
   meta: { sortable, className: 'text-right', cellClassName: 'text-right' },
   cell: ({ getValue }) => (
-    <span className="tabular-nums font-medium">{formatCurrency(getValue() ?? 0)}</span>
+    <span className="font-medium tabular-nums">{formatCurrency(getValue() ?? 0)}</span>
   ),
 });
 
-/** Inteiro */
 export const integerColumn = ({ id, header, accessor, sortable = true }) => ({
   id,
   accessorKey: accessor ?? id,
@@ -70,7 +81,6 @@ export const integerColumn = ({ id, header, accessor, sortable = true }) => ({
   cell: ({ getValue }) => <span className="tabular-nums">{formatInteger(getValue() ?? 0)}</span>,
 });
 
-/** Data dd/MM/yyyy */
 export const dateColumn = ({ id, header, accessor, withTime = false, sortable = true }) => ({
   id,
   accessorKey: accessor ?? id,
@@ -83,7 +93,6 @@ export const dateColumn = ({ id, header, accessor, withTime = false, sortable = 
   ),
 });
 
-/** Badge por status configurável via map */
 export const statusColumn = ({ id = 'status', header = 'Status', accessor = 'status', map }) => ({
   id,
   accessorKey: accessor,
@@ -96,7 +105,6 @@ export const statusColumn = ({ id = 'status', header = 'Status', accessor = 'sta
   },
 });
 
-/** Coluna de ações (fica à direita, sem header) */
 export const actionsColumn = (cellRenderer) => ({
   id: 'actions',
   header: () => <span className="sr-only">Ações</span>,

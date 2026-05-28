@@ -25,19 +25,19 @@ import { customersHooks } from '../hooks/useCustomers';
 import { CustomerForm } from '../components/CustomerForm';
 
 const STATUS_MAP = {
-  active:   { label: 'Ativo',     variant: 'success'  },
-  inactive: { label: 'Inativo',   variant: 'secondary'},
-  blocked:  { label: 'Bloqueado', variant: 'danger'   },
+  active: { label: 'Ativo', variant: 'success' },
+  inactive: { label: 'Inativo', variant: 'secondary' },
+  blocked: { label: 'Bloqueado', variant: 'danger' },
 };
 
 export function CustomersListPage() {
   const [{ page, perPage, search, sort, asc }, setQueryStates] = useQueryStates(
     {
-      page:    parseAsInteger.withDefault(1),
+      page: parseAsInteger.withDefault(1),
       perPage: parseAsInteger.withDefault(20),
-      search:  parseAsString.withDefault(''),
-      sort:    parseAsString.withDefault('created_at'),
-      asc:     parseAsInteger.withDefault(0),
+      search: parseAsString.withDefault(''),
+      sort: parseAsString.withDefault('created_at'),
+      asc: parseAsInteger.withDefault(0),
     },
     { history: 'replace' },
   );
@@ -45,7 +45,8 @@ export function CustomersListPage() {
   const debouncedSearch = useDebounce(search, 300);
   const queryParams = useMemo(
     () => ({
-      page, perPage,
+      page,
+      perPage,
       search: debouncedSearch,
       searchField: 'name',
       order: { field: sort, asc: asc === 1 },
@@ -109,7 +110,13 @@ export function CustomersListPage() {
     () => [
       nameWithAvatarColumn({ subAccessor: 'email' }),
       documentColumn({}),
-      textColumn({ id: 'phone', header: 'Telefone', accessor: 'phone', muted: true, sortable: false }),
+      textColumn({
+        id: 'phone',
+        header: 'Telefone',
+        accessor: 'phone',
+        muted: true,
+        sortable: false,
+      }),
       statusColumn({ map: STATUS_MAP }),
       dateColumn({ id: 'created_at', header: 'Criado em', accessor: 'created_at' }),
       actionsColumn((customer) => (
@@ -131,6 +138,7 @@ export function CustomersListPage() {
         </RowActions>
       )),
     ],
+
     [],
   );
 

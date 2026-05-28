@@ -10,10 +10,6 @@ if (!url || !key) {
   );
 }
 
-/**
- * Client Supabase singleton.
- * NUNCA importar isto diretamente em componentes — passe sempre por um repository.
- */
 export const supabase = createClient(url ?? 'http://localhost:54321', key ?? 'public-anon-key', {
   auth: {
     persistSession: true,

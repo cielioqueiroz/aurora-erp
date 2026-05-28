@@ -27,10 +27,7 @@ export function DataTablePagination({ page, perPage, total, onPageChange, onPerP
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
           <span className="text-xs text-muted-foreground">Por página</span>
-          <Select
-            value={String(perPage)}
-            onValueChange={(v) => onPerPageChange?.(Number(v))}
-          >
+          <Select value={String(perPage)} onValueChange={(v) => onPerPageChange?.(Number(v))}>
             <SelectTrigger className="h-8 w-[78px]">
               <SelectValue />
             </SelectTrigger>

@@ -3,17 +3,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { cn } from '@/lib/cn';
 
-/**
- * KpiCard — métrica de destaque com delta + sparkline opcional.
- * @param {object} props
- * @param {string} props.label
- * @param {string|number} props.value
- * @param {number} [props.delta] variação (ex: 0.124 = +12,4%)
- * @param {string} [props.deltaLabel] ex: "vs. semana passada"
- * @param {React.ComponentType} [props.icon]
- * @param {React.ReactNode} [props.sparkline]
- * @param {boolean} [props.loading]
- */
 export function KpiCard({ label, value, delta, deltaLabel, icon: Icon, sparkline, loading }) {
   const positive = (delta ?? 0) >= 0;
 
@@ -42,9 +31,7 @@ export function KpiCard({ label, value, delta, deltaLabel, icon: Icon, sparkline
                 <span
                   className={cn(
                     'inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 font-semibold',
-                    positive
-                      ? 'bg-success/10 text-success'
-                      : 'bg-destructive/10 text-destructive',
+                    positive ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive',
                   )}
                 >
                   {positive ? (

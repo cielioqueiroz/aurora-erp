@@ -3,9 +3,6 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/cn';
 
-/**
- * Toolbar padrão de tabela: busca + slot esquerdo (filtros) + slot direito (ações).
- */
 export function DataTableToolbar({
   searchValue = '',
   onSearchChange,
@@ -15,7 +12,12 @@ export function DataTableToolbar({
   className,
 }) {
   return (
-    <div className={cn('flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between', className)}>
+    <div
+      className={cn(
+        'flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between',
+        className,
+      )}
+    >
       <div className="flex flex-1 items-center gap-2">
         <div className="relative max-w-sm flex-1">
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -25,6 +27,7 @@ export function DataTableToolbar({
             placeholder={placeholder}
             className="h-9 pl-8 pr-8"
           />
+
           {searchValue && (
             <button
               type="button"

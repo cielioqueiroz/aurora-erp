@@ -12,10 +12,7 @@ export function RolesListPage() {
 
   return (
     <div>
-      <PageHeader
-        title="Papéis"
-        description="Papéis seed do sistema e permissões agrupadas."
-      />
+      <PageHeader title="Papéis" description="Papéis seed do sistema e permissões agrupadas." />
 
       {isLoading ? (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -69,8 +66,8 @@ export function RolesListPage() {
 
       <div className="mt-6 rounded-lg border border-dashed border-border bg-muted/30 p-6 text-center">
         <p className="text-sm text-muted-foreground">
-          Edição granular de permissões e criação de papéis customizados chegam na próxima
-          iteração. A infraestrutura RBAC já está pronta no banco.
+          Edição granular de permissões e criação de papéis customizados chegam na próxima iteração.
+          A infraestrutura RBAC já está pronta no banco.
         </p>
       </div>
     </div>

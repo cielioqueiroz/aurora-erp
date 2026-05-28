@@ -5,11 +5,6 @@ import { usePermission } from '@/hooks/usePermission';
 import { ROUTES } from '@/constants/routes';
 import { LoadingScreen } from '@/components/feedback/LoadingScreen';
 
-/**
- * ProtectedRoute — exige sessão e (opcionalmente) permissões.
- * Usuário autenticado sem empresa vinculada é enviado de volta ao signup
- * para concluir o onboarding em 2 passos.
- */
 export function ProtectedRoute({ children, requiredPermissions, all }) {
   const { isAuthenticated, isLoading } = useAuth();
   const hasCompanies = useAuthStore((s) => s.companies.length > 0);

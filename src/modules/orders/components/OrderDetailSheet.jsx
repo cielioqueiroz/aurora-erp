@@ -26,7 +26,13 @@ import {
 } from '@/components/ui/table';
 import { useOrderDetail, useUpdateOrderStatus } from '../hooks/useOrders';
 import { ORDER_STATUS_MAP } from '../constants';
-import { formatCurrency, formatDate, formatDateTime, formatDocument, formatInteger } from '@/lib/formatters';
+import {
+  formatCurrency,
+  formatDate,
+  formatDateTime,
+  formatDocument,
+  formatInteger,
+} from '@/lib/formatters';
 import { toast } from '@/components/ui/toast';
 
 export function OrderDetailSheet({ orderId, open, onOpenChange }) {
@@ -34,10 +40,13 @@ export function OrderDetailSheet({ orderId, open, onOpenChange }) {
   const updateStatus = useUpdateOrderStatus();
 
   const handleStatusChange = (status) => {
-    updateStatus.mutate({ id: orderId, status }, {
-      onSuccess: () => toast.success('Status atualizado'),
-      onError: (err) => toast.error(err.message ?? 'Erro'),
-    });
+    updateStatus.mutate(
+      { id: orderId, status },
+      {
+        onSuccess: () => toast.success('Status atualizado'),
+        onError: (err) => toast.error(err.message ?? 'Erro'),
+      },
+    );
   };
 
   return (
@@ -57,9 +66,7 @@ export function OrderDetailSheet({ orderId, open, onOpenChange }) {
               <div className="flex items-start justify-between gap-3">
                 <div>
                   <SheetTitle className="font-mono text-lg">{order.code}</SheetTitle>
-                  <SheetDescription>
-                    Criado em {formatDateTime(order.created_at)}
-                  </SheetDescription>
+                  <SheetDescription>Criado em {formatDateTime(order.created_at)}</SheetDescription>
                 </div>
                 <Badge variant={ORDER_STATUS_MAP[order.status]?.variant ?? 'secondary'}>
                   {ORDER_STATUS_MAP[order.status]?.label ?? order.status}
@@ -68,7 +75,7 @@ export function OrderDetailSheet({ orderId, open, onOpenChange }) {
             </SheetHeader>
 
             <div className="flex-1 space-y-6 overflow-y-auto px-6 py-5">
-              {/* Cliente */}
+              {}
               <section>
                 <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   Cliente
@@ -82,7 +89,7 @@ export function OrderDetailSheet({ orderId, open, onOpenChange }) {
                 </div>
               </section>
 
-              {/* Itens */}
+              {}
               <section>
                 <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   Itens
@@ -107,7 +114,7 @@ export function OrderDetailSheet({ orderId, open, onOpenChange }) {
                           <TableCell className="text-right tabular-nums">
                             {formatCurrency(item.unit_price)}
                           </TableCell>
-                          <TableCell className="text-right tabular-nums font-medium">
+                          <TableCell className="text-right font-medium tabular-nums">
                             {formatCurrency(item.total)}
                           </TableCell>
                         </TableRow>
@@ -117,7 +124,7 @@ export function OrderDetailSheet({ orderId, open, onOpenChange }) {
                 </div>
               </section>
 
-              {/* Totais */}
+              {}
               <section className="space-y-1.5 rounded-lg border border-border bg-muted/30 p-4 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
@@ -134,7 +141,7 @@ export function OrderDetailSheet({ orderId, open, onOpenChange }) {
                 </div>
               </section>
 
-              {/* Pagamentos */}
+              {}
               {(order.payments ?? []).length > 0 && (
                 <section>
                   <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -152,7 +159,9 @@ export function OrderDetailSheet({ orderId, open, onOpenChange }) {
                             {p.paid_at ? `Pago em ${formatDate(p.paid_at)}` : 'Pendente'}
                           </p>
                         </div>
-                        <span className="tabular-nums font-semibold">{formatCurrency(p.amount)}</span>
+                        <span className="font-semibold tabular-nums">
+                          {formatCurrency(p.amount)}
+                        </span>
                       </div>
                     ))}
                   </div>

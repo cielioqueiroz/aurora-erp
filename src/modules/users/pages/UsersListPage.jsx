@@ -33,14 +33,20 @@ const inviteSchema = z.object({
 });
 
 const STATUS_MAP = {
-  active:    { label: 'Ativo',    variant: 'success'   },
-  invited:   { label: 'Convidado', variant: 'info'     },
-  suspended: { label: 'Suspenso', variant: 'warning'   },
-  removed:   { label: 'Removido', variant: 'secondary' },
+  active: { label: 'Ativo', variant: 'success' },
+  invited: { label: 'Convidado', variant: 'info' },
+  suspended: { label: 'Suspenso', variant: 'warning' },
+  removed: { label: 'Removido', variant: 'secondary' },
 };
 
 function InviteForm({ formId, roles, onSubmit }) {
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
     resolver: zodResolver(inviteSchema),
     defaultValues: { email: '', role_id: roles?.find((r) => r.name === 'operator')?.id ?? '' },
   });
@@ -53,7 +59,9 @@ function InviteForm({ formId, roles, onSubmit }) {
       </FormField>
       <FormField label="Papel" error={errors.role_id?.message} required>
         <Select value={roleId} onValueChange={(v) => setValue('role_id', v)}>
-          <SelectTrigger><SelectValue placeholder="Selecionar" /></SelectTrigger>
+          <SelectTrigger>
+            <SelectValue placeholder="Selecionar" />
+          </SelectTrigger>
           <SelectContent>
             {(roles ?? []).map((r) => (
               <SelectItem key={r.id} value={r.id}>
@@ -90,7 +98,12 @@ function MemberRow({ member, onRemove }) {
         </div>
         <Can permission={PERMISSIONS.USERS_REMOVE}>
           {member.role_name !== 'owner' && (
-            <Button variant="ghost" size="icon-sm" onClick={() => onRemove(member)} aria-label="Remover">
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => onRemove(member)}
+              aria-label="Remover"
+            >
               <Trash2 className="h-4 w-4 text-destructive" />
             </Button>
           )}
@@ -113,7 +126,10 @@ export function UsersListPage() {
 
   const handleInvite = (payload) => {
     inviteMutation.mutate(payload, {
-      onSuccess: () => { toast.success('Convite enviado'); setInviteOpen(false); },
+      onSuccess: () => {
+        toast.success('Convite enviado');
+        setInviteOpen(false);
+      },
       onError: (err) => toast.error(err.message ?? 'Erro'),
     });
   };
@@ -175,10 +191,15 @@ export function UsersListPage() {
         description="O membro perderá acesso a esta empresa. Sua conta de usuário não é deletada."
         confirmLabel="Remover"
         loading={removeMutation.isPending}
-        onConfirm={() => removeMutation.mutate(removing.id, {
-          onSuccess: () => { toast.success('Membro removido'); setRemoving(null); },
-          onError: (err) => toast.error(err.message ?? 'Erro'),
-        })}
+        onConfirm={() =>
+          removeMutation.mutate(removing.id, {
+            onSuccess: () => {
+              toast.success('Membro removido');
+              setRemoving(null);
+            },
+            onError: (err) => toast.error(err.message ?? 'Erro'),
+          })
+        }
       />
     </div>
   );

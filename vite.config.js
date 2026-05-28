@@ -26,12 +26,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
       include: ['src/**/*.{js,jsx}'],
-      exclude: [
-        'src/**/*.test.{js,jsx}',
-        'src/tests/**',
-        'src/main.jsx',
-        'src/**/index.js',
-      ],
+      exclude: ['src/**/*.test.{js,jsx}', 'src/tests/**', 'src/main.jsx', 'src/**/index.js'],
       thresholds: {
         lines: 50,
         functions: 50,

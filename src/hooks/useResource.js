@@ -1,16 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-/**
- * Cria uma família de hooks padronizada para um recurso CRUD.
- *
- * @example
- * const customers = createResourceHooks('customers', customersRepository);
- * customers.useList({ page, perPage, search, sort });
- * customers.useOne(id);
- * customers.useCreate();
- * customers.useUpdate();
- * customers.useDelete();
- */
 export function createResourceHooks(name, repository) {
   const keys = {
     all: [name],

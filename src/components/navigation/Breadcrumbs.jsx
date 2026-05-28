@@ -38,10 +38,7 @@ export function Breadcrumbs() {
         <span key={`${c.label}-${i}`} className="flex items-center gap-1.5">
           <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
           {c.href ? (
-            <Link
-              to={c.href}
-              className="rounded px-1 text-muted-foreground hover:text-foreground"
-            >
+            <Link to={c.href} className="rounded px-1 text-muted-foreground hover:text-foreground">
               {c.label}
             </Link>
           ) : (

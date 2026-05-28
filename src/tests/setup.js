@@ -10,7 +10,6 @@ afterEach(() => {
 });
 afterAll(() => server.close());
 
-// matchMedia mock (used by theme provider, framer-motion)
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: vi.fn().mockImplementation((query) => ({
@@ -25,7 +24,6 @@ Object.defineProperty(window, 'matchMedia', {
   })),
 });
 
-// IntersectionObserver mock
 class IntersectionObserverMock {
   observe = vi.fn();
   unobserve = vi.fn();
@@ -33,7 +31,6 @@ class IntersectionObserverMock {
 }
 window.IntersectionObserver = IntersectionObserverMock;
 
-// ResizeObserver mock (Radix uses it)
 class ResizeObserverMock {
   observe = vi.fn();
   unobserve = vi.fn();
@@ -41,5 +38,4 @@ class ResizeObserverMock {
 }
 window.ResizeObserver = ResizeObserverMock;
 
-// scrollTo (cmdk uses it)
 window.HTMLElement.prototype.scrollIntoView = vi.fn();

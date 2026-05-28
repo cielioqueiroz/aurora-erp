@@ -1,10 +1,5 @@
 import { onlyDigits } from '@/lib/parsers';
 
-/**
- * Valida CPF (11 dígitos, dígitos verificadores).
- * @param {string} value
- * @returns {boolean}
- */
 export function isValidCPF(value) {
   const cpf = onlyDigits(value);
   if (cpf.length !== 11) return false;
@@ -23,10 +18,6 @@ export function isValidCPF(value) {
   return dv2 === Number(cpf[10]);
 }
 
-/**
- * Valida CNPJ (14 dígitos, dígitos verificadores).
- * @param {string} value
- */
 export function isValidCNPJ(value) {
   const cnpj = onlyDigits(value);
   if (cnpj.length !== 14) return false;
@@ -49,7 +40,6 @@ export function isValidCNPJ(value) {
   return dv2 === Number(cnpj[13]);
 }
 
-/** Aceita CPF (11) ou CNPJ (14). */
 export function isValidDocument(value) {
   const digits = onlyDigits(value);
   if (digits.length === 11) return isValidCPF(digits);
@@ -57,13 +47,11 @@ export function isValidDocument(value) {
   return false;
 }
 
-/** Telefone fixo (10) ou celular (11). */
 export function isValidPhone(value) {
   const digits = onlyDigits(value);
   return digits.length === 10 || digits.length === 11;
 }
 
-/** CEP (8 dígitos). */
 export function isValidCEP(value) {
   return onlyDigits(value).length === 8;
 }

@@ -1,8 +1,4 @@
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { ArrowUpDown, ChevronDown, ChevronUp } from 'lucide-react';
 import {
   Table,
@@ -17,23 +13,6 @@ import { EmptyState } from '@/components/feedback/EmptyState';
 import { DataTablePagination } from './DataTablePagination';
 import { cn } from '@/lib/cn';
 
-/**
- * DataTable — wrapper premium em volta do TanStack Table.
- *
- * @param {object} props
- * @param {Array} props.columns — defs do TanStack Table
- * @param {Array} props.data — linhas
- * @param {number} props.total — total no servidor
- * @param {boolean} [props.loading]
- * @param {number} props.page (1-based)
- * @param {number} props.perPage
- * @param {{ field: string, asc: boolean } | null} props.sort
- * @param {(field: string) => void} props.onSortChange
- * @param {(page: number) => void} props.onPageChange
- * @param {(perPage: number) => void} props.onPerPageChange
- * @param {{ icon, title, description, action } | null} [props.emptyState]
- * @param {React.ReactNode} [props.toolbar]
- */
 export function DataTable({
   columns,
   data = [],
@@ -133,7 +112,9 @@ export function DataTable({
                 <EmptyState
                   icon={emptyState?.icon}
                   title={emptyState?.title ?? 'Nada encontrado'}
-                  description={emptyState?.description ?? 'Ajuste os filtros ou cadastre um novo item.'}
+                  description={
+                    emptyState?.description ?? 'Ajuste os filtros ou cadastre um novo item.'
+                  }
                   action={emptyState?.action}
                 />
               </TableCell>

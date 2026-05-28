@@ -40,9 +40,7 @@ export function LoginPage() {
     <div>
       <div className="mb-8 space-y-2">
         <h1 className="text-3xl font-semibold tracking-tight">Entrar</h1>
-        <p className="text-sm text-muted-foreground">
-          Acesse sua conta AURORA ERP para continuar.
-        </p>
+        <p className="text-sm text-muted-foreground">Acesse sua conta AURORA ERP para continuar.</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
@@ -64,6 +62,7 @@ export function LoginPage() {
               className="pr-10"
               {...register('password')}
             />
+
             <button
               type="button"
               onClick={() => setShowPassword((s) => !s)}
@@ -76,10 +75,7 @@ export function LoginPage() {
         </FormField>
 
         <div className="flex items-center justify-end">
-          <Link
-            to={ROUTES.RECOVER}
-            className="text-xs font-medium text-primary hover:underline"
-          >
+          <Link to={ROUTES.RECOVER} className="text-xs font-medium text-primary hover:underline">
             Esqueci minha senha
           </Link>
         </div>

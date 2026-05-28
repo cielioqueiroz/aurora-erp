@@ -63,11 +63,7 @@ export function CommandPalette() {
           <CommandItem
             onSelect={handle(() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark'))}
           >
-            {resolvedTheme === 'dark' ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
+            {resolvedTheme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             <span>Alternar tema</span>
             <CommandShortcut>⇧⌘L</CommandShortcut>
           </CommandItem>

@@ -25,11 +25,7 @@ import { DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdow
 import { DataTable } from '@/components/tables/DataTable';
 import { DataTableToolbar } from '@/components/tables/DataTableToolbar';
 import { RowActions } from '@/components/tables/RowActions';
-import {
-  currencyColumn,
-  dateColumn,
-  actionsColumn,
-} from '@/components/tables/columnHelpers';
+import { currencyColumn, dateColumn, actionsColumn } from '@/components/tables/columnHelpers';
 import { CrudSheet } from '@/components/forms/CrudSheet';
 import { ConfirmDialog } from '@/components/feedback/ConfirmDialog';
 import { Can } from '@/routes/Can';
@@ -41,15 +37,15 @@ import { FinanceForm } from '../components/FinanceForm';
 import { formatCurrency } from '@/lib/formatters';
 
 const STATUS_MAP = {
-  pending:   { label: 'Pendente',   variant: 'secondary' },
-  paid:      { label: 'Pago',       variant: 'success'   },
-  overdue:   { label: 'Vencido',    variant: 'danger'    },
-  cancelled: { label: 'Cancelado',  variant: 'warning'   },
+  pending: { label: 'Pendente', variant: 'secondary' },
+  paid: { label: 'Pago', variant: 'success' },
+  overdue: { label: 'Vencido', variant: 'danger' },
+  cancelled: { label: 'Cancelado', variant: 'warning' },
 };
 
 const TYPE_MAP = {
   receivable: { label: 'A receber', variant: 'success' },
-  payable:    { label: 'A pagar',   variant: 'danger'  },
+  payable: { label: 'A pagar', variant: 'danger' },
 };
 
 export function FinancePage() {
@@ -86,10 +82,11 @@ export function FinancePage() {
   const transactions = result?.data ?? [];
   const total = result?.count ?? 0;
 
-  // KPIs (sobre todos resultados na página atual)
   const { data: allResult } = financeHooks.useList({ perPage: 1000 });
   const kpis = useMemo(() => {
-    let receivablePending = 0, payablePending = 0, overdue = 0;
+    let receivablePending = 0,
+      payablePending = 0,
+      overdue = 0;
     for (const tx of allResult?.data ?? []) {
       if (tx.status === 'paid') continue;
       if (tx.status === 'overdue') overdue += Number(tx.amount);
@@ -104,15 +101,25 @@ export function FinancePage() {
   const [deleting, setDeleting] = useState(null);
 
   const createMutation = financeHooks.useCreate({
-    onSuccess: () => { toast.success('Lançamento criado'); setSheetOpen(false); },
+    onSuccess: () => {
+      toast.success('Lançamento criado');
+      setSheetOpen(false);
+    },
     onError: (err) => toast.error(err.message ?? 'Erro'),
   });
   const updateMutation = financeHooks.useUpdate({
-    onSuccess: () => { toast.success('Lançamento atualizado'); setSheetOpen(false); setEditing(null); },
+    onSuccess: () => {
+      toast.success('Lançamento atualizado');
+      setSheetOpen(false);
+      setEditing(null);
+    },
     onError: (err) => toast.error(err.message ?? 'Erro'),
   });
   const deleteMutation = financeHooks.useDelete({
-    onSuccess: () => { toast.success('Lançamento excluído'); setDeleting(null); },
+    onSuccess: () => {
+      toast.success('Lançamento excluído');
+      setDeleting(null);
+    },
     onError: (err) => toast.error(err.message ?? 'Erro'),
   });
 
@@ -163,7 +170,12 @@ export function FinancePage() {
       actionsColumn((tx) => (
         <RowActions>
           <Can permission={PERMISSIONS.FINANCE_UPDATE}>
-            <DropdownMenuItem onSelect={() => { setEditing(tx); setSheetOpen(true); }}>
+            <DropdownMenuItem
+              onSelect={() => {
+                setEditing(tx);
+                setSheetOpen(true);
+              }}
+            >
               <Pencil className="h-4 w-4" /> Editar
             </DropdownMenuItem>
           </Can>
@@ -179,6 +191,7 @@ export function FinancePage() {
         </RowActions>
       )),
     ],
+
     [],
   );
 
@@ -189,7 +202,12 @@ export function FinancePage() {
         description="Contas a pagar e a receber."
         actions={
           <Can permission={PERMISSIONS.FINANCE_CREATE}>
-            <Button onClick={() => { setEditing(null); setSheetOpen(true); }}>
+            <Button
+              onClick={() => {
+                setEditing(null);
+                setSheetOpen(true);
+              }}
+            >
               <Plus className="h-4 w-4" /> Novo lançamento
             </Button>
           </Can>
@@ -198,10 +216,30 @@ export function FinancePage() {
 
       <Section>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <KpiSimple label="A receber" value={formatCurrency(kpis.receivablePending)} icon={TrendingUp} tone="success" />
-          <KpiSimple label="A pagar" value={formatCurrency(kpis.payablePending)} icon={TrendingDown} tone="danger" />
-          <KpiSimple label="Vencidos" value={formatCurrency(kpis.overdue)} icon={CalendarClock} tone="warning" />
-          <KpiSimple label="Saldo previsto" value={formatCurrency(kpis.net)} icon={Wallet} tone={kpis.net >= 0 ? 'success' : 'danger'} />
+          <KpiSimple
+            label="A receber"
+            value={formatCurrency(kpis.receivablePending)}
+            icon={TrendingUp}
+            tone="success"
+          />
+          <KpiSimple
+            label="A pagar"
+            value={formatCurrency(kpis.payablePending)}
+            icon={TrendingDown}
+            tone="danger"
+          />
+          <KpiSimple
+            label="Vencidos"
+            value={formatCurrency(kpis.overdue)}
+            icon={CalendarClock}
+            tone="warning"
+          />
+          <KpiSimple
+            label="Saldo previsto"
+            value={formatCurrency(kpis.net)}
+            icon={Wallet}
+            tone={kpis.net >= 0 ? 'success' : 'danger'}
+          />
         </div>
       </Section>
 
@@ -224,20 +262,32 @@ export function FinancePage() {
             placeholder="Buscar por descrição…"
             filters={
               <>
-                <Select value={type || 'all'} onValueChange={(v) => setQueryStates({ type: v === 'all' ? '' : v, page: 1 })}>
-                  <SelectTrigger className="h-9 w-[140px]"><SelectValue /></SelectTrigger>
+                <Select
+                  value={type || 'all'}
+                  onValueChange={(v) => setQueryStates({ type: v === 'all' ? '' : v, page: 1 })}
+                >
+                  <SelectTrigger className="h-9 w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todos tipos</SelectItem>
                     <SelectItem value="receivable">A receber</SelectItem>
                     <SelectItem value="payable">A pagar</SelectItem>
                   </SelectContent>
                 </Select>
-                <Select value={status || 'all'} onValueChange={(v) => setQueryStates({ status: v === 'all' ? '' : v, page: 1 })}>
-                  <SelectTrigger className="h-9 w-[140px]"><SelectValue /></SelectTrigger>
+                <Select
+                  value={status || 'all'}
+                  onValueChange={(v) => setQueryStates({ status: v === 'all' ? '' : v, page: 1 })}
+                >
+                  <SelectTrigger className="h-9 w-[140px]">
+                    <SelectValue />
+                  </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todos status</SelectItem>
                     {Object.entries(STATUS_MAP).map(([k, cfg]) => (
-                      <SelectItem key={k} value={k}>{cfg.label}</SelectItem>
+                      <SelectItem key={k} value={k}>
+                        {cfg.label}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -249,13 +299,20 @@ export function FinancePage() {
 
       <CrudSheet
         open={sheetOpen}
-        onOpenChange={(open) => { setSheetOpen(open); if (!open) setEditing(null); }}
+        onOpenChange={(open) => {
+          setSheetOpen(open);
+          if (!open) setEditing(null);
+        }}
         title={editing ? 'Editar lançamento' : 'Novo lançamento'}
         submitLabel={editing ? 'Salvar' : 'Criar'}
         loading={createMutation.isPending || updateMutation.isPending}
         onSubmit={() => document.getElementById('finance-form')?.requestSubmit()}
       >
-        <FinanceForm formId="finance-form" defaultValues={editing ?? undefined} onSubmit={handleSubmit} />
+        <FinanceForm
+          formId="finance-form"
+          defaultValues={editing ?? undefined}
+          onSubmit={handleSubmit}
+        />
       </CrudSheet>
 
       <ConfirmDialog
@@ -274,7 +331,7 @@ export function FinancePage() {
 function KpiSimple({ label, value, icon: Icon, tone = 'default' }) {
   const toneClass = {
     success: 'text-success bg-success/10',
-    danger:  'text-destructive bg-destructive/10',
+    danger: 'text-destructive bg-destructive/10',
     warning: 'text-warning bg-warning/10',
     default: 'text-primary bg-aurora-soft',
   }[tone];
@@ -285,7 +342,9 @@ function KpiSimple({ label, value, icon: Icon, tone = 'default' }) {
           <Icon className="h-5 w-5" />
         </div>
         <div className="min-w-0">
-          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            {label}
+          </p>
           <p className="text-xl font-semibold tabular-nums">{value}</p>
         </div>
       </CardContent>

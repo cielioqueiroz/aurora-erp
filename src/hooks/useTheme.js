@@ -10,9 +10,6 @@ function applyTheme(theme) {
   root.style.colorScheme = isDark ? 'dark' : 'light';
 }
 
-/**
- * useTheme — provê theme + setter; sincroniza com classe `.dark` no <html>.
- */
 export function useTheme() {
   const theme = useThemeStore((s) => s.theme);
   const setTheme = useThemeStore((s) => s.setTheme);

@@ -15,11 +15,7 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { DataTable } from '@/components/tables/DataTable';
 import { DataTableToolbar } from '@/components/tables/DataTableToolbar';
 import { RowActions } from '@/components/tables/RowActions';
-import {
-  currencyColumn,
-  dateColumn,
-  actionsColumn,
-} from '@/components/tables/columnHelpers';
+import { currencyColumn, dateColumn, actionsColumn } from '@/components/tables/columnHelpers';
 import { useDebounce } from '@/hooks/useDebounce';
 import { ordersHooks } from '../hooks/useOrders';
 import { ORDER_STATUS_MAP } from '../constants';
@@ -67,6 +63,7 @@ export function OrdersListPage() {
         cell: ({ getValue }) => (
           <span className="font-mono text-xs font-medium tabular-nums">{getValue()}</span>
         ),
+
         size: 110,
       },
       {
@@ -94,15 +91,13 @@ export function OrdersListPage() {
         </RowActions>
       )),
     ],
+
     [],
   );
 
   return (
     <div>
-      <PageHeader
-        title="Pedidos"
-        description={`${total} pedido${total === 1 ? '' : 's'}`}
-      />
+      <PageHeader title="Pedidos" description={`${total} pedido${total === 1 ? '' : 's'}`} />
 
       <DataTable
         columns={columns}
@@ -124,9 +119,7 @@ export function OrdersListPage() {
             filters={
               <Select
                 value={status || 'all'}
-                onValueChange={(v) =>
-                  setQueryStates({ status: v === 'all' ? '' : v, page: 1 })
-                }
+                onValueChange={(v) => setQueryStates({ status: v === 'all' ? '' : v, page: 1 })}
               >
                 <SelectTrigger className="h-9 w-[160px]">
                   <SelectValue />

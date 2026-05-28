@@ -1,9 +1,5 @@
 import { useEffect } from 'react';
 
-/**
- * Atalho de teclado global.
- * @example useShortcut('mod+k', () => setOpen(true))
- */
 export function useShortcut(combo, handler, { enabled = true } = {}) {
   useEffect(() => {
     if (!enabled) return undefined;

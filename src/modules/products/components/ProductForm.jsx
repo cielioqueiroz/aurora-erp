@@ -39,7 +39,13 @@ export function ProductForm({ formId = 'product-form', defaultValues, categories
     form.reset({ ...emptyDefaults, ...defaultValues });
   }, [defaultValues, form]);
 
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = form;
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = form;
   const unit = watch('unit') ?? 'un';
   const categoryId = watch('category_id') ?? '';
   const isActive = watch('is_active');
@@ -97,7 +103,10 @@ export function ProductForm({ formId = 'product-form', defaultValues, categories
         </FormField>
 
         <FormField label="Status" className="sm:col-span-2">
-          <Select value={isActive ? 'true' : 'false'} onValueChange={(v) => setValue('is_active', v === 'true')}>
+          <Select
+            value={isActive ? 'true' : 'false'}
+            onValueChange={(v) => setValue('is_active', v === 'true')}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -108,23 +117,40 @@ export function ProductForm({ formId = 'product-form', defaultValues, categories
           </Select>
         </FormField>
 
-        <FormField label="Preço de venda (R$)" error={errors.price?.message} required className="sm:col-span-2">
+        <FormField
+          label="Preço de venda (R$)"
+          error={errors.price?.message}
+          required
+          className="sm:col-span-2"
+        >
           <Input type="number" step="0.01" min="0" {...register('price')} />
         </FormField>
         <FormField label="Custo (R$)" error={errors.cost?.message} className="sm:col-span-2">
           <Input type="number" step="0.01" min="0" {...register('cost')} />
         </FormField>
-        <FormField label="Estoque mínimo" error={errors.stock_min?.message} className="sm:col-span-2">
+        <FormField
+          label="Estoque mínimo"
+          error={errors.stock_min?.message}
+          className="sm:col-span-2"
+        >
           <Input type="number" step="0.001" min="0" {...register('stock_min')} />
         </FormField>
 
-        <FormField label="Código de barras" error={errors.barcode?.message} className="sm:col-span-3">
+        <FormField
+          label="Código de barras"
+          error={errors.barcode?.message}
+          className="sm:col-span-3"
+        >
           <Input placeholder="789..." {...register('barcode')} />
         </FormField>
       </div>
 
       <FormField label="Descrição" error={errors.description?.message}>
-        <Textarea rows={3} {...register('description')} placeholder="Detalhes do produto (opcional)" />
+        <Textarea
+          rows={3}
+          {...register('description')}
+          placeholder="Detalhes do produto (opcional)"
+        />
       </FormField>
     </form>
   );

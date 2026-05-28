@@ -27,13 +27,19 @@ const DashboardPage = lazy(() =>
   import('@/modules/dashboard/pages/DashboardPage').then((m) => ({ default: m.DashboardPage })),
 );
 const CustomersListPage = lazy(() =>
-  import('@/modules/customers/pages/CustomersListPage').then((m) => ({ default: m.CustomersListPage })),
+  import('@/modules/customers/pages/CustomersListPage').then((m) => ({
+    default: m.CustomersListPage,
+  })),
 );
 const SuppliersListPage = lazy(() =>
-  import('@/modules/suppliers/pages/SuppliersListPage').then((m) => ({ default: m.SuppliersListPage })),
+  import('@/modules/suppliers/pages/SuppliersListPage').then((m) => ({
+    default: m.SuppliersListPage,
+  })),
 );
 const ProductsListPage = lazy(() =>
-  import('@/modules/products/pages/ProductsListPage').then((m) => ({ default: m.ProductsListPage })),
+  import('@/modules/products/pages/ProductsListPage').then((m) => ({
+    default: m.ProductsListPage,
+  })),
 );
 const InventoryPage = lazy(() =>
   import('@/modules/inventory/pages/InventoryPage').then((m) => ({ default: m.InventoryPage })),
@@ -71,6 +77,7 @@ export const router = createBrowserRouter([
         <AuthLayout />
       </PublicOnlyRoute>
     ),
+
     children: [
       { index: true, element: <Navigate to={ROUTES.LOGIN} replace /> },
       { path: 'login', element: lazyLoad(LoginPage) },
@@ -89,6 +96,7 @@ export const router = createBrowserRouter([
         <AppLayout />
       </ProtectedRoute>
     ),
+
     children: [
       {
         path: ROUTES.DASHBOARD,
@@ -97,6 +105,7 @@ export const router = createBrowserRouter([
             {lazyLoad(DashboardPage)}
           </ProtectedRoute>
         ),
+
         handle: { breadcrumb: 'Dashboard' },
       },
       {

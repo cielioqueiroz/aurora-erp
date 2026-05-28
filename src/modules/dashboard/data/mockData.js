@@ -1,8 +1,3 @@
-/**
- * Dados mock para o dashboard.
- * Serão substituídos quando os módulos de domínio existirem.
- */
-
 const days = Array.from({ length: 14 }, (_, i) => i);
 
 export const kpis = {
@@ -27,7 +22,10 @@ export const kpis = {
   ticket: {
     value: 247.13,
     delta: -0.015,
-    series: days.map((i) => ({ label: `D-${14 - i}`, value: Math.round(180 + Math.random() * 100) })),
+    series: days.map((i) => ({
+      label: `D-${14 - i}`,
+      value: Math.round(180 + Math.random() * 100),
+    })),
   },
 };
 

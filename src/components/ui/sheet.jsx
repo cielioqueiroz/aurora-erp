@@ -41,7 +41,11 @@ const sheetVariants = cva(
 const SheetContent = React.forwardRef(({ side = 'right', className, children, ...props }, ref) => (
   <SheetPortal>
     <SheetOverlay />
-    <DialogPrimitive.Content ref={ref} className={cn(sheetVariants({ side }), className)} {...props}>
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn(sheetVariants({ side }), className)}
+      {...props}
+    >
       {children}
       <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
         <X className="h-4 w-4" />
@@ -74,12 +78,4 @@ const SheetDescription = React.forwardRef(({ className, ...props }, ref) => (
 ));
 SheetDescription.displayName = DialogPrimitive.Description.displayName;
 
-export {
-  Sheet,
-  SheetTrigger,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-};
+export { Sheet, SheetTrigger, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetDescription };

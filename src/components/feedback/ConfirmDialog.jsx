@@ -9,20 +9,6 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
-/**
- * Dialog modal genérico de confirmação destrutiva.
- *
- * <ConfirmDialog
- *   open={open}
- *   onOpenChange={setOpen}
- *   title="Excluir cliente?"
- *   description="Esta ação não pode ser desfeita."
- *   confirmLabel="Excluir"
- *   onConfirm={handleDelete}
- *   loading={mutation.isPending}
- *   variant="destructive"
- * />
- */
 export function ConfirmDialog({
   open,
   onOpenChange,

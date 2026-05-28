@@ -1,17 +1,8 @@
 import { useEffect } from 'react';
 import { authRepository } from '@/repositories/authRepository';
 import { useAuthStore } from '@/store/authStore';
-import {
-  isDemoMode,
-  DEMO_SESSION,
-  DEMO_COMPANIES,
-  DEMO_PERMISSIONS,
-} from './demoMode';
+import { isDemoMode, DEMO_SESSION, DEMO_COMPANIES, DEMO_PERMISSIONS } from './demoMode';
 
-/**
- * AuthBootstrap — inicializa a sessão do Supabase e mantém o store sincronizado.
- * Renderiza children apenas após a sessão inicial ter sido resolvida.
- */
 export function AuthBootstrap({ children }) {
   const setSession = useAuthStore((s) => s.setSession);
   const setCompanies = useAuthStore((s) => s.setCompanies);
@@ -44,7 +35,6 @@ export function AuthBootstrap({ children }) {
         setCompanies(companies ?? []);
         setPermissions(permissions ?? []);
       } catch {
-        // Silenciar para não bloquear bootstrap em caso de Supabase offline
         if (!active) return;
         setCompanies([]);
         setPermissions([]);

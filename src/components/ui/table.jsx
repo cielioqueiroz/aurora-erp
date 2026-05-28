@@ -3,11 +3,7 @@ import { cn } from '@/lib/cn';
 
 const Table = React.forwardRef(({ className, ...props }, ref) => (
   <div className="relative w-full overflow-auto">
-    <table
-      ref={ref}
-      className={cn('w-full caption-bottom text-sm', className)}
-      {...props}
-    />
+    <table ref={ref} className={cn('w-full caption-bottom text-sm', className)} {...props} />
   </div>
 ));
 Table.displayName = 'Table';
@@ -35,7 +31,7 @@ const TableRow = React.forwardRef(({ className, ...props }, ref) => (
   <tr
     ref={ref}
     className={cn(
-      'border-b border-border/60 transition-colors hover:bg-muted/30 data-[state=selected]:bg-aurora-soft/40',
+      'data-[state=selected]:bg-aurora-soft/40 border-b border-border/60 transition-colors hover:bg-muted/30',
       className,
     )}
     {...props}
@@ -69,13 +65,4 @@ const TableCaption = React.forwardRef(({ className, ...props }, ref) => (
 ));
 TableCaption.displayName = 'TableCaption';
 
-export {
-  Table,
-  TableHeader,
-  TableBody,
-  TableFooter,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableCaption,
-};
+export { Table, TableHeader, TableBody, TableFooter, TableHead, TableRow, TableCell, TableCaption };

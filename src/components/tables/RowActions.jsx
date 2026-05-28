@@ -6,15 +6,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-/**
- * RowActions — botão "..." que abre dropdown com ações por linha.
- *
- * <RowActions>
- *   <DropdownMenuItem onSelect={...}>Editar</DropdownMenuItem>
- *   <DropdownMenuSeparator />
- *   <DropdownMenuItem onSelect={...} className="text-destructive">Excluir</DropdownMenuItem>
- * </RowActions>
- */
 export function RowActions({ children, align = 'end' }) {
   return (
     <DropdownMenu>

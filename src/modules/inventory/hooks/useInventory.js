@@ -16,7 +16,8 @@ export function useStockBalance() {
 export function useInventoryMovements(params = {}) {
   return useQuery({
     queryKey: KEYS.movements(params),
-    queryFn: () => inventoryRepository.list({ ...params, order: { field: 'created_at', asc: false } }),
+    queryFn: () =>
+      inventoryRepository.list({ ...params, order: { field: 'created_at', asc: false } }),
     placeholderData: (prev) => prev,
   });
 }

@@ -12,7 +12,6 @@ import { unwrap } from '@/integrations/supabase/errors';
 
 const baseRepo = createRepository('orders', { demoStore: demoOrders });
 
-/** Lista pedidos com nome do cliente já resolvido. */
 async function listWithCustomer(params = {}) {
   if (isDemoMode) {
     const result = await baseRepo.list(params);
@@ -25,7 +24,6 @@ async function listWithCustomer(params = {}) {
     return { ...result, data };
   }
 
-  // Supabase: join inline
   const { page = 1, perPage = 20, order = { field: 'created_at', asc: false }, search } = params;
   const from = (page - 1) * perPage;
   const to = from + perPage - 1;
@@ -65,10 +63,7 @@ async function getDetail(orderId) {
   );
   if (!order) return null;
   const items = unwrap(
-    await supabase
-      .from('order_items')
-      .select('*, product:product_id(*)')
-      .eq('order_id', orderId),
+    await supabase.from('order_items').select('*, product:product_id(*)').eq('order_id', orderId),
   );
   const payments = unwrap(await supabase.from('payments').select('*').eq('order_id', orderId));
   return { ...order, items: items ?? [], payments: payments ?? [] };

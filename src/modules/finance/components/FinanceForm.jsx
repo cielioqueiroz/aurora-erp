@@ -28,7 +28,13 @@ export function FinanceForm({ formId = 'finance-form', defaultValues, onSubmit }
   });
   useEffect(() => form.reset({ ...empty, ...defaultValues }), [defaultValues, form]);
 
-  const { register, handleSubmit, setValue, watch, formState: { errors } } = form;
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors },
+  } = form;
   const type = watch('type');
   const status = watch('status');
 
@@ -37,7 +43,9 @@ export function FinanceForm({ formId = 'finance-form', defaultValues, onSubmit }
       <div className="grid gap-4 sm:grid-cols-2">
         <FormField label="Tipo" error={errors.type?.message} required>
           <Select value={type} onValueChange={(v) => setValue('type', v)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="receivable">A receber</SelectItem>
               <SelectItem value="payable">A pagar</SelectItem>
@@ -46,7 +54,9 @@ export function FinanceForm({ formId = 'finance-form', defaultValues, onSubmit }
         </FormField>
         <FormField label="Status">
           <Select value={status} onValueChange={(v) => setValue('status', v)}>
-            <SelectTrigger><SelectValue /></SelectTrigger>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
             <SelectContent>
               <SelectItem value="pending">Pendente</SelectItem>
               <SelectItem value="paid">Pago</SelectItem>

@@ -57,7 +57,6 @@ export const authRepository = {
     return data;
   },
 
-  /** RPC: cria empresa e vincula o usuário como owner. */
   async createCompany({ name, document, email, phone }) {
     const res = await supabase.rpc('create_company_with_owner', {
       p_name: name,
@@ -66,7 +65,7 @@ export const authRepository = {
       p_phone: phone,
     });
     const company = unwrap(res);
-    // Recarrega o JWT para incorporar a claim current_company_id
+
     await supabase.auth.refreshSession();
     return company;
   },
@@ -74,7 +73,7 @@ export const authRepository = {
   async switchCompany(companyId) {
     const res = await supabase.rpc('switch_active_company', { p_company_id: companyId });
     if (res.error) throw toAppError(res.error);
-    // Força refresh do JWT para incorporar nova claim
+
     await supabase.auth.refreshSession();
   },
 

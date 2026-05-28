@@ -1,8 +1,3 @@
-/**
- * Catálogo central de permissões.
- * Mantenha sincronizado com supabase/seeds/permissions_and_roles.sql.
- */
-
 export const MODULES = Object.freeze({
   DASHBOARD: 'dashboard',
   CUSTOMERS: 'customers',

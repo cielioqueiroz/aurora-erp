@@ -36,6 +36,7 @@ Supabase Client (integrations/supabase)
 ```
 
 **Regras de ouro:**
+
 - Componentes NUNCA importam `@/integrations/supabase` diretamente.
 - Hooks consomem serviços/repositórios via TanStack Query.
 - Schemas Zod ficam em `validations/`, compartilhados entre form e service.
@@ -43,6 +44,7 @@ Supabase Client (integrations/supabase)
 - Componentes `components/ui` são primitivos, agnósticos a regra de negócio.
 
 **Camadas de estado:**
+
 - **Server state** → TanStack Query (cache, refetch, invalidation, optimistic updates)
 - **Global UI state** → Zustand (auth, current company, theme, sidebar collapsed)
 - **Form state** → React Hook Form + Zod
@@ -52,23 +54,23 @@ Supabase Client (integrations/supabase)
 
 ## 3. Stack Complementar
 
-| Necessidade | Escolha | Razão |
-|---|---|---|
-| Roteamento | React Router v6 (data router) | `createBrowserRouter` com loaders |
-| Tabelas | TanStack Table + Shadcn DataTable | Headless, integra com nuqs |
-| Datas | date-fns + locale pt-BR | Tree-shakable |
-| Moeda | `Intl.NumberFormat('pt-BR', { currency: 'BRL' })` | Nativo, zero dep |
-| Documentos BR | Validação custom em `validations/br.ts` | CNPJ/CPF |
-| Toasts | Sonner | Mais polido que toast padrão |
-| Command palette | `cmdk` (vem com Shadcn) | UX premium (Cmd+K) |
-| URL state | nuqs | Filtros bookmarkáveis |
-| Error boundary | react-error-boundary | Padrão da indústria |
-| Class merging | clsx + tailwind-merge → `cn()` | Padrão Shadcn |
-| Ícones | Lucide React | Já no prompt |
-| Animação | Framer Motion | Já no prompt |
-| Charts | Recharts | Já no prompt |
-| Testes | Vitest + RTL + MSW + Cypress | MSW mocka Supabase |
-| Mock API | MSW | Para testar repositories isoladamente |
+| Necessidade     | Escolha                                           | Razão                                 |
+| --------------- | ------------------------------------------------- | ------------------------------------- |
+| Roteamento      | React Router v6 (data router)                     | `createBrowserRouter` com loaders     |
+| Tabelas         | TanStack Table + Shadcn DataTable                 | Headless, integra com nuqs            |
+| Datas           | date-fns + locale pt-BR                           | Tree-shakable                         |
+| Moeda           | `Intl.NumberFormat('pt-BR', { currency: 'BRL' })` | Nativo, zero dep                      |
+| Documentos BR   | Validação custom em `validations/br.ts`           | CNPJ/CPF                              |
+| Toasts          | Sonner                                            | Mais polido que toast padrão          |
+| Command palette | `cmdk` (vem com Shadcn)                           | UX premium (Cmd+K)                    |
+| URL state       | nuqs                                              | Filtros bookmarkáveis                 |
+| Error boundary  | react-error-boundary                              | Padrão da indústria                   |
+| Class merging   | clsx + tailwind-merge → `cn()`                    | Padrão Shadcn                         |
+| Ícones          | Lucide React                                      | Já no prompt                          |
+| Animação        | Framer Motion                                     | Já no prompt                          |
+| Charts          | Recharts                                          | Já no prompt                          |
+| Testes          | Vitest + RTL + MSW + Cypress                      | MSW mocka Supabase                    |
+| Mock API        | MSW                                               | Para testar repositories isoladamente |
 
 ---
 
@@ -143,16 +145,19 @@ docs/
 ## 5. Modelagem do Banco
 
 ### Núcleo multi-tenant
+
 - `companies` — `id, name, document (CNPJ), settings jsonb, created_at, updated_at`
 - `profiles` — espelha `auth.users`. `id (=auth.users.id), full_name, avatar_url, default_company_id`
 - `user_companies` — `user_id, company_id, role_id, status (active|suspended|invited), invited_by, joined_at`
 
 ### RBAC
+
 - `roles` — `id, company_id (null = system role), name, description, is_system_role`
 - `permissions` — `id, key (ex: 'customers.create'), module, action, description`
 - `role_permissions` — `role_id, permission_id`
 
 ### Domínio
+
 - `customers`, `suppliers` — `id, company_id, name, document, email, phone, address jsonb, status, created_by, timestamps`
 - `categories` — `id, company_id, name, parent_id` (hierárquico)
 - `products` — `id, company_id, sku, name, category_id, price, cost, stock_min, unit, is_active`
@@ -165,12 +170,14 @@ docs/
 - `audit_logs` — `id, company_id, user_id, action, entity, entity_id, diff jsonb, ip, created_at`
 
 ### Convenções universais
+
 - Toda tabela de domínio tem `company_id uuid not null references companies`
 - Toda tabela tem `created_at`, `updated_at` (trigger automático), `deleted_at` (soft delete)
 - Toda tabela tem `created_by` apontando para `auth.users`
 - Índice composto `(company_id, <campo de busca mais comum>)`
 
 ### RLS Pattern
+
 ```sql
 create function auth.current_company_id() returns uuid ...
 
@@ -201,6 +208,7 @@ create policy "requires_permission" on customers
 ## 7. RBAC
 
 ### Permissões seed (`<module>.<action>`)
+
 - `dashboard.read`
 - `customers.{read,create,update,delete}`
 - `suppliers.{read,create,update,delete}`
@@ -214,6 +222,7 @@ create policy "requires_permission" on customers
 - `settings.{read,update}`
 
 ### Papéis seed
+
 - `owner` — criado no signup, todas as permissões, indestrutível
 - `admin` — tudo exceto owner-only
 - `manager` — CRUDs operacionais sem settings/roles
@@ -221,11 +230,13 @@ create policy "requires_permission" on customers
 - `viewer` — só leitura
 
 ### Frontend
+
 - Hook `usePermission('customers.create')` → boolean
 - Componente `<Can permission="customers.create">{...}</Can>`
 - Sidebar oculta módulos sem `*.read`
 
 ### Backend
+
 - Função `auth.has_permission(key text)` consultada nos `with check` das policies de INSERT/UPDATE/DELETE
 - SELECT só checa tenant isolation
 
@@ -244,29 +255,35 @@ create policy "requires_permission" on customers
 ## 9. Design System
 
 ### Tema
+
 Dual (light/dark), light como padrão. Toggle persistido em localStorage + sincroniza com SO.
 
 ### Paleta (CSS variables HSL via Shadcn)
+
 - Primary: **Aurora Indigo** `hsl(243, 75%, 59%)`
 - Accent: **Aurora Violet** `hsl(263, 70%, 65%)`
 - Neutros: escala slate (50 → 950)
 - Semânticos: success (emerald), warning (amber), danger (rose), info (sky)
 
 ### Tipografia
+
 - Sans: **Inter** (variável, 100-900)
 - Mono: **JetBrains Mono** (SKUs, IDs, valores monetários)
 
 ### Espaçamento e raio
+
 - Base 4px (Tailwind)
 - `--radius: 0.625rem` (10px) cards/inputs; `0.375rem` (6px) botões
 - Shadows sutis em camadas
 
 ### Layout principal
+
 - **Sidebar fixa esquerda** (260px / 72px colapsada): logo + company switcher → módulos → user menu
 - **Topbar:** breadcrumbs + Cmd+K → notifications → theme toggle → avatar
 - **PageHeader + Section** blocks padrão
 
 ### Microinterações
+
 - Route transitions fade + slide-up (150ms)
 - Hover em cards: lift sutil
 - Sidebar collapse: spring
@@ -274,6 +291,7 @@ Dual (light/dark), light como padrão. Toggle persistido em localStorage + sincr
 - Optimistic UI em mutations rápidas
 
 ### Componentes-bandeira
+
 - Command Palette (Cmd+K) — navegação + ações + busca global
 - KPI Cards com sparkline + delta semanal
 - DataTable premium: filtros, ordenação, seleção, ações em lote, export, paginação server-side
@@ -285,6 +303,7 @@ Dual (light/dark), light como padrão. Toggle persistido em localStorage + sincr
 ## 10. Plano de Implementação (Etapas 1-3)
 
 ### Etapa 1 — Fundação
+
 1. Vite + React + estrutura de pastas
 2. Tailwind + tokens (CSS vars) + tema
 3. Aliases (`@/*`), ESLint, Prettier, Husky, lint-staged
@@ -295,6 +314,7 @@ Dual (light/dark), light como padrão. Toggle persistido em localStorage + sincr
 8. README + .env.example
 
 ### Etapa 2 — Supabase + Auth + RBAC
+
 9. `supabase/migrations/0001_init_multitenancy.sql`
 10. `supabase/migrations/0002_rls_helpers.sql`
 11. `supabase/migrations/0003_audit_notifications.sql`
@@ -308,6 +328,7 @@ Dual (light/dark), light como padrão. Toggle persistido em localStorage + sincr
 19. Hooks: `useAuth`, `usePermission`, `useCurrentCompany`
 
 ### Etapa 3 — Design System + Layouts + Dashboard
+
 20. Shadcn primitives: button, input, label, form, dialog, sheet, dropdown-menu, popover, command, tabs, table, badge, avatar, skeleton, toast (sonner), tooltip, separator, scroll-area
 21. Componentes próprios: PageHeader, Section, KpiCard, EmptyState, ErrorState, DataTable, FormField, CommandPalette
 22. AppShell: Sidebar (colapsável, company switcher), Topbar (busca, notifications, theme, user menu)
@@ -319,6 +340,7 @@ Dual (light/dark), light como padrão. Toggle persistido em localStorage + sincr
 ---
 
 ## Decisões aprovadas
+
 - Sem TypeScript (prompt: "JavaScript") — JSDoc para type hints
 - Multi-tenant via `app_metadata.current_company_id` no JWT
 - Onboarding incluído na Etapa 2

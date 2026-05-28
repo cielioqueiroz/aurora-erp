@@ -1,12 +1,8 @@
-/**
- * Mapeia erros do Supabase/PostgREST para mensagens em PT-BR.
- */
-
 const PG_ERROR_MAP = {
-  '23505': 'Já existe um registro com estes dados.',
-  '23503': 'Operação não permitida: registro relacionado em uso.',
-  '23502': 'Campo obrigatório não preenchido.',
-  '42501': 'Você não tem permissão para esta operação.',
+  23505: 'Já existe um registro com estes dados.',
+  23503: 'Operação não permitida: registro relacionado em uso.',
+  23502: 'Campo obrigatório não preenchido.',
+  42501: 'Você não tem permissão para esta operação.',
   '22P02': 'Formato inválido em um dos campos.',
 };
 
@@ -27,18 +23,15 @@ export class AppError extends Error {
   }
 }
 
-/** Converte erro do Supabase em AppError com mensagem PT-BR. */
 export function toAppError(error, fallback = 'Algo deu errado. Tente novamente.') {
   if (!error) return new AppError(fallback);
   if (error instanceof AppError) return error;
 
-  // Erros do PostgREST / Postgres
   const pgCode = error.code;
   if (pgCode && PG_ERROR_MAP[pgCode]) {
     return new AppError(PG_ERROR_MAP[pgCode], { cause: error, code: pgCode });
   }
 
-  // Erros do Supabase Auth
   const msg = error.message ?? '';
   if (AUTH_ERROR_MAP[msg]) {
     return new AppError(AUTH_ERROR_MAP[msg], { cause: error });
@@ -47,7 +40,6 @@ export function toAppError(error, fallback = 'Algo deu errado. Tente novamente.'
   return new AppError(msg || fallback, { cause: error, code: pgCode });
 }
 
-/** Garante que `{ data, error }` lançou caso error não-nulo. Retorna data. */
 export function unwrap({ data, error }, fallback) {
   if (error) throw toAppError(error, fallback);
   return data;

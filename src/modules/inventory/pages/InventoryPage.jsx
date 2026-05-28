@@ -109,7 +109,13 @@ function MovementForm({ formId, products, onSubmit }) {
         description="Apenas para entradas. Opcional."
         error={errors.unit_cost?.message}
       >
-        <Input type="number" step="0.01" min="0" {...register('unit_cost')} disabled={type !== 'in'} />
+        <Input
+          type="number"
+          step="0.01"
+          min="0"
+          {...register('unit_cost')}
+          disabled={type !== 'in'}
+        />
       </FormField>
 
       <FormField label="Motivo" error={errors.reason?.message}>
@@ -121,9 +127,9 @@ function MovementForm({ formId, products, onSubmit }) {
 
 function MovementTypeBadge({ type }) {
   const map = {
-    in:     { label: 'Entrada', variant: 'success', icon: ArrowDownToLine },
-    out:    { label: 'Saída',   variant: 'warning', icon: ArrowUpFromLine },
-    adjust: { label: 'Ajuste',  variant: 'info',    icon: Settings2 },
+    in: { label: 'Entrada', variant: 'success', icon: ArrowDownToLine },
+    out: { label: 'Saída', variant: 'warning', icon: ArrowUpFromLine },
+    adjust: { label: 'Ajuste', variant: 'info', icon: Settings2 },
   };
   const cfg = map[type] ?? map.adjust;
   const Icon = cfg.icon;
@@ -136,15 +142,14 @@ function MovementTypeBadge({ type }) {
 
 export function InventoryPage() {
   const { data: balance, isLoading: balanceLoading } = useStockBalance();
-  const { data: movementsResult, isLoading: movementsLoading } = useInventoryMovements({ perPage: 50 });
+  const { data: movementsResult, isLoading: movementsLoading } = useInventoryMovements({
+    perPage: 50,
+  });
   const { data: productsResult } = productsHooks.useList({ perPage: 200 });
   const products = useMemo(() => productsResult?.data ?? [], [productsResult?.data]);
   const movements = movementsResult?.data ?? [];
 
-  const productById = useMemo(
-    () => Object.fromEntries(products.map((p) => [p.id, p])),
-    [products],
-  );
+  const productById = useMemo(() => Object.fromEntries(products.map((p) => [p.id, p])), [products]);
 
   const [sheetOpen, setSheetOpen] = useState(false);
   const createMutation = useCreateMovement();
@@ -244,7 +249,9 @@ export function InventoryPage() {
                 {balanceLoading ? (
                   Array.from({ length: 4 }).map((_, i) => (
                     <TableRow key={i}>
-                      <TableCell colSpan={5}><Skeleton className="h-4 w-full" /></TableCell>
+                      <TableCell colSpan={5}>
+                        <Skeleton className="h-4 w-full" />
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : balance && balance.length > 0 ? (
@@ -254,9 +261,11 @@ export function InventoryPage() {
                       <TableRow key={row.product.id}>
                         <TableCell>
                           <p className="font-medium">{row.product.name}</p>
-                          <p className="font-mono text-xs text-muted-foreground">{row.product.sku ?? '—'}</p>
+                          <p className="font-mono text-xs text-muted-foreground">
+                            {row.product.sku ?? '—'}
+                          </p>
                         </TableCell>
-                        <TableCell className="text-right tabular-nums font-medium">
+                        <TableCell className="text-right font-medium tabular-nums">
                           {formatInteger(row.balance)} {row.product.unit}
                         </TableCell>
                         <TableCell className="text-right tabular-nums text-muted-foreground">
@@ -276,7 +285,11 @@ export function InventoryPage() {
                     );
                   })
                 ) : (
-                  <TableRow><TableCell colSpan={5}><EmptyState icon={Boxes} title="Sem produtos ainda" /></TableCell></TableRow>
+                  <TableRow>
+                    <TableCell colSpan={5}>
+                      <EmptyState icon={Boxes} title="Sem produtos ainda" />
+                    </TableCell>
+                  </TableRow>
                 )}
               </TableBody>
             </Table>
@@ -299,7 +312,9 @@ export function InventoryPage() {
                 {movementsLoading ? (
                   Array.from({ length: 5 }).map((_, i) => (
                     <TableRow key={i}>
-                      <TableCell colSpan={5}><Skeleton className="h-4 w-full" /></TableCell>
+                      <TableCell colSpan={5}>
+                        <Skeleton className="h-4 w-full" />
+                      </TableCell>
                     </TableRow>
                   ))
                 ) : movements.length > 0 ? (
@@ -311,15 +326,22 @@ export function InventoryPage() {
                       <TableCell className="font-medium">
                         {productById[mov.product_id]?.name ?? mov.product_id}
                       </TableCell>
-                      <TableCell><MovementTypeBadge type={mov.type} /></TableCell>
+                      <TableCell>
+                        <MovementTypeBadge type={mov.type} />
+                      </TableCell>
                       <TableCell className="text-right tabular-nums">
-                        {mov.type === 'out' ? '−' : '+'}{formatInteger(mov.quantity)}
+                        {mov.type === 'out' ? '−' : '+'}
+                        {formatInteger(mov.quantity)}
                       </TableCell>
                       <TableCell className="text-muted-foreground">{mov.reason ?? '—'}</TableCell>
                     </TableRow>
                   ))
                 ) : (
-                  <TableRow><TableCell colSpan={5}><EmptyState title="Sem movimentações" /></TableCell></TableRow>
+                  <TableRow>
+                    <TableCell colSpan={5}>
+                      <EmptyState title="Sem movimentações" />
+                    </TableCell>
+                  </TableRow>
                 )}
               </TableBody>
             </Table>

@@ -1,11 +1,3 @@
-/**
- * Demo fixtures — dados de mentira para popular as listagens em VITE_DEMO_MODE.
- * Repositórios detectam o flag e retornam destes arrays no lugar de chamar o Supabase.
- *
- * NÃO use em produção. NÃO importe destes objetos a partir de código de runtime;
- * use apenas via `applyDemoFixtures` que faz cópia defensiva.
- */
-
 import { addDays, subDays } from 'date-fns';
 
 const today = new Date();
@@ -27,44 +19,35 @@ const base = (extra) => ({
   ...extra,
 });
 
-// ---------------------------------------------------------------------------
-// CUSTOMERS
-// ---------------------------------------------------------------------------
 const customersSeed = [
-  ['Marina Souza',      '52998224725', 'marina.souza@exemplo.com',    '11999991111', 'active'],
-  ['Lúcio Almeida',     '03945567890', 'lucio.almeida@exemplo.com',   '11988882222', 'active'],
-  ['TechHub Ltda',      '11222333000181', 'contato@techhub.com.br',   '1133334444',  'active'],
-  ['Ana Vieira',        '12345678909', 'ana.vieira@exemplo.com',      '11977774444', 'active'],
-  ['Café Aurora ME',    '34567890000123', 'pedidos@cafeaurora.com.br', '1144442222', 'inactive'],
-  ['João Pedro',        '98765432100', 'joao.pedro@exemplo.com',      '11955558888', 'active'],
-  ['Lojas Atlas',       '45678901000156', 'compras@lojasatlas.com.br', '1133338888', 'active'],
-  ['Beatriz Carvalho',  '78912345600', 'bia@exemplo.com',             '11966661111', 'active'],
-  ['Marcelo Tavares',   '15975346800', 'marcelo@exemplo.com',         '11944443333', 'blocked'],
-  ['Mercado Verde',     '23456789000198', 'contato@mercadoverde.com',  '1145671234', 'active'],
+  ['Marina Souza', '52998224725', 'marina.souza@exemplo.com', '11999991111', 'active'],
+  ['Lúcio Almeida', '03945567890', 'lucio.almeida@exemplo.com', '11988882222', 'active'],
+  ['TechHub Ltda', '11222333000181', 'contato@techhub.com.br', '1133334444', 'active'],
+  ['Ana Vieira', '12345678909', 'ana.vieira@exemplo.com', '11977774444', 'active'],
+  ['Café Aurora ME', '34567890000123', 'pedidos@cafeaurora.com.br', '1144442222', 'inactive'],
+  ['João Pedro', '98765432100', 'joao.pedro@exemplo.com', '11955558888', 'active'],
+  ['Lojas Atlas', '45678901000156', 'compras@lojasatlas.com.br', '1133338888', 'active'],
+  ['Beatriz Carvalho', '78912345600', 'bia@exemplo.com', '11966661111', 'active'],
+  ['Marcelo Tavares', '15975346800', 'marcelo@exemplo.com', '11944443333', 'blocked'],
+  ['Mercado Verde', '23456789000198', 'contato@mercadoverde.com', '1145671234', 'active'],
 ];
 
 export const demoCustomers = customersSeed.map(([name, document, email, phone, status]) =>
   base({ name, document, email, phone, status, address: {}, notes: '' }),
 );
 
-// ---------------------------------------------------------------------------
-// SUPPLIERS
-// ---------------------------------------------------------------------------
 const suppliersSeed = [
-  ['Distribuidora Atlas', '12345678000190', 'comercial@atlas.com.br',   '1133221100', 'active'],
-  ['Importadora Sol',     '23456789000189', 'contato@sol.com.br',       '1144551122', 'active'],
-  ['Grãos do Cerrado',    '34567890000178', 'pedidos@cerrado.com.br',   '1155667788', 'active'],
-  ['Embalagens Líder',    '45678901000167', 'vendas@lider.com.br',      '1166778899', 'active'],
-  ['Logística Express',   '56789012000156', 'sac@express.com.br',       '1177889900', 'inactive'],
+  ['Distribuidora Atlas', '12345678000190', 'comercial@atlas.com.br', '1133221100', 'active'],
+  ['Importadora Sol', '23456789000189', 'contato@sol.com.br', '1144551122', 'active'],
+  ['Grãos do Cerrado', '34567890000178', 'pedidos@cerrado.com.br', '1155667788', 'active'],
+  ['Embalagens Líder', '45678901000167', 'vendas@lider.com.br', '1166778899', 'active'],
+  ['Logística Express', '56789012000156', 'sac@express.com.br', '1177889900', 'inactive'],
 ];
 
 export const demoSuppliers = suppliersSeed.map(([name, document, email, phone, status]) =>
   base({ name, document, email, phone, status, address: {}, notes: '' }),
 );
 
-// ---------------------------------------------------------------------------
-// CATEGORIES + PRODUCTS
-// ---------------------------------------------------------------------------
 const cat = (name) => base({ name, parent_id: null, description: '' });
 export const demoCategories = [
   cat('Bebidas'),
@@ -75,39 +58,45 @@ export const demoCategories = [
 ];
 
 const productsSeed = [
-  ['CAF-001', 'Café Especial Aurora 250g',    'Cafés',        45.9,  18.5, 'un',  10, 'https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400'],
-  ['CAF-002', 'Café Espresso Blend 1kg',      'Cafés',       129.9,  62.0, 'un',  15],
-  ['BEB-101', 'Chá Verde Premium 100g',       'Bebidas',      32.5,  14.0, 'un',  20],
-  ['EQU-201', 'Cafeteira Italiana 6 xícaras', 'Equipamentos', 189.0,  92.0, 'un',   8],
-  ['EQU-202', 'Moedor de Café Manual',        'Equipamentos', 249.9, 110.0, 'un',   5],
-  ['ACE-301', 'Caneca Aurora 300ml',          'Acessórios',    39.9,  12.0, 'un',  25],
-  ['ACE-302', 'Filtro de Papel nº 103 (40un)','Acessórios',    14.5,   5.5, 'un',  50],
-  ['EMB-401', 'Sacola Kraft P (100un)',       'Embalagens',    78.0,  35.0, 'un',  30],
+  [
+    'CAF-001',
+    'Café Especial Aurora 250g',
+    'Cafés',
+    45.9,
+    18.5,
+    'un',
+    10,
+    'https://images.unsplash.com/photo-1559496417-e7f25cb247f3?w=400',
+  ],
+  ['CAF-002', 'Café Espresso Blend 1kg', 'Cafés', 129.9, 62.0, 'un', 15],
+  ['BEB-101', 'Chá Verde Premium 100g', 'Bebidas', 32.5, 14.0, 'un', 20],
+  ['EQU-201', 'Cafeteira Italiana 6 xícaras', 'Equipamentos', 189.0, 92.0, 'un', 8],
+  ['EQU-202', 'Moedor de Café Manual', 'Equipamentos', 249.9, 110.0, 'un', 5],
+  ['ACE-301', 'Caneca Aurora 300ml', 'Acessórios', 39.9, 12.0, 'un', 25],
+  ['ACE-302', 'Filtro de Papel nº 103 (40un)', 'Acessórios', 14.5, 5.5, 'un', 50],
+  ['EMB-401', 'Sacola Kraft P (100un)', 'Embalagens', 78.0, 35.0, 'un', 30],
 ];
 
 const catByName = Object.fromEntries(demoCategories.map((c) => [c.name, c.id]));
-export const demoProducts = productsSeed.map(([sku, name, catName, price, cost, unit, stock_min, image]) =>
-  base({
-    sku,
-    barcode: null,
-    name,
-    description: '',
-    category_id: catByName[catName],
-    unit,
-    price,
-    cost,
-    stock_min,
-    is_active: true,
-    images: image ? [image] : [],
-  }),
+export const demoProducts = productsSeed.map(
+  ([sku, name, catName, price, cost, unit, stock_min, image]) =>
+    base({
+      sku,
+      barcode: null,
+      name,
+      description: '',
+      category_id: catByName[catName],
+      unit,
+      price,
+      cost,
+      stock_min,
+      is_active: true,
+      images: image ? [image] : [],
+    }),
 );
 
-// ---------------------------------------------------------------------------
-// INVENTORY MOVEMENTS — gera entradas/saídas para alguns produtos
-// ---------------------------------------------------------------------------
 export const demoInventoryMovements = [];
 demoProducts.forEach((product, idx) => {
-  // 1 entrada inicial
   demoInventoryMovements.push(
     base({
       product_id: product.id,
@@ -120,7 +109,7 @@ demoProducts.forEach((product, idx) => {
       created_at: iso(subDays(today, 30 + idx)),
     }),
   );
-  // 1-2 saídas
+
   for (let i = 0; i < 1 + (idx % 2); i += 1) {
     demoInventoryMovements.push(
       base({
@@ -137,9 +126,6 @@ demoProducts.forEach((product, idx) => {
   }
 });
 
-// ---------------------------------------------------------------------------
-// ORDERS + ITEMS + PAYMENTS
-// ---------------------------------------------------------------------------
 export const demoOrders = [];
 export const demoOrderItems = [];
 export const demoPayments = [];
@@ -206,64 +192,125 @@ for (let i = 0; i < 18; i += 1) {
   }
 }
 
-// ---------------------------------------------------------------------------
-// FINANCE TRANSACTIONS
-// ---------------------------------------------------------------------------
 const financeSeed = [
-  ['receivable', 'Vendas', 'NF #2042 — Marina Souza',       1248.9,  -3, 'paid'],
-  ['receivable', 'Vendas', 'NF #2043 — TechHub Ltda',       3560.0,   0, 'pending'],
-  ['receivable', 'Vendas', 'NF #2044 — Ana Vieira',          512.0,   2, 'pending'],
-  ['payable',    'Fornecedores', 'Fatura Distribuidora Atlas',     4870.0,   5, 'pending'],
-  ['payable',    'Fornecedores', 'Fatura Importadora Sol',         1980.0,   8, 'pending'],
-  ['payable',    'Fixos',        'Aluguel',                        3200.0,  -2, 'paid'],
-  ['payable',    'Fixos',        'Energia elétrica',                480.0,   3, 'pending'],
-  ['payable',    'Marketing',    'Anúncios Meta',                  1200.0,  10, 'pending'],
-  ['receivable', 'Vendas', 'NF #2045 — Lojas Atlas',         8240.0,  -5, 'overdue'],
-  ['receivable', 'Vendas', 'NF #2046 — Beatriz Carvalho',     320.0,   6, 'pending'],
+  ['receivable', 'Vendas', 'NF #2042 — Marina Souza', 1248.9, -3, 'paid'],
+  ['receivable', 'Vendas', 'NF #2043 — TechHub Ltda', 3560.0, 0, 'pending'],
+  ['receivable', 'Vendas', 'NF #2044 — Ana Vieira', 512.0, 2, 'pending'],
+  ['payable', 'Fornecedores', 'Fatura Distribuidora Atlas', 4870.0, 5, 'pending'],
+  ['payable', 'Fornecedores', 'Fatura Importadora Sol', 1980.0, 8, 'pending'],
+  ['payable', 'Fixos', 'Aluguel', 3200.0, -2, 'paid'],
+  ['payable', 'Fixos', 'Energia elétrica', 480.0, 3, 'pending'],
+  ['payable', 'Marketing', 'Anúncios Meta', 1200.0, 10, 'pending'],
+  ['receivable', 'Vendas', 'NF #2045 — Lojas Atlas', 8240.0, -5, 'overdue'],
+  ['receivable', 'Vendas', 'NF #2046 — Beatriz Carvalho', 320.0, 6, 'pending'],
 ];
 
-export const demoFinanceTransactions = financeSeed.map(([type, category, description, amount, offsetDays, status]) =>
-  base({
-    type,
-    category,
-    description,
-    amount,
-    due_date: iso(addDays(today, offsetDays)).slice(0, 10),
-    paid_at: status === 'paid' ? iso(today) : null,
-    status,
-    reference_type: null,
-    reference_id: null,
-  }),
+export const demoFinanceTransactions = financeSeed.map(
+  ([type, category, description, amount, offsetDays, status]) =>
+    base({
+      type,
+      category,
+      description,
+      amount,
+      due_date: iso(addDays(today, offsetDays)).slice(0, 10),
+      paid_at: status === 'paid' ? iso(today) : null,
+      status,
+      reference_type: null,
+      reference_id: null,
+    }),
 );
 
-// ---------------------------------------------------------------------------
-// USERS (team) — usa user_companies + profiles
-// ---------------------------------------------------------------------------
 export const demoTeamMembers = [
-  { id: DEMO_USER_ID,            full_name: 'Visitante Demo', email: 'demo@auroraerp.local',  role_name: 'owner',    status: 'active', joined_at: iso(subDays(today, 60)) },
-  { id: 'user-ana',               full_name: 'Ana Vieira',     email: 'ana@aurora.local',      role_name: 'admin',    status: 'active', joined_at: iso(subDays(today, 30)) },
-  { id: 'user-joao',              full_name: 'João Pedro',     email: 'joao@aurora.local',     role_name: 'manager',  status: 'active', joined_at: iso(subDays(today, 15)) },
-  { id: 'user-marina',            full_name: 'Marina Souza',   email: 'marina@aurora.local',   role_name: 'operator', status: 'active', joined_at: iso(subDays(today, 10)) },
-  { id: 'user-lucas',              full_name: 'Lucas Ferreira', email: 'lucas@aurora.local',    role_name: 'viewer',   status: 'invited', joined_at: iso(subDays(today, 2)) },
+  {
+    id: DEMO_USER_ID,
+    full_name: 'Visitante Demo',
+    email: 'demo@auroraerp.local',
+    role_name: 'owner',
+    status: 'active',
+    joined_at: iso(subDays(today, 60)),
+  },
+  {
+    id: 'user-ana',
+    full_name: 'Ana Vieira',
+    email: 'ana@aurora.local',
+    role_name: 'admin',
+    status: 'active',
+    joined_at: iso(subDays(today, 30)),
+  },
+  {
+    id: 'user-joao',
+    full_name: 'João Pedro',
+    email: 'joao@aurora.local',
+    role_name: 'manager',
+    status: 'active',
+    joined_at: iso(subDays(today, 15)),
+  },
+  {
+    id: 'user-marina',
+    full_name: 'Marina Souza',
+    email: 'marina@aurora.local',
+    role_name: 'operator',
+    status: 'active',
+    joined_at: iso(subDays(today, 10)),
+  },
+  {
+    id: 'user-lucas',
+    full_name: 'Lucas Ferreira',
+    email: 'lucas@aurora.local',
+    role_name: 'viewer',
+    status: 'invited',
+    joined_at: iso(subDays(today, 2)),
+  },
 ];
 
-// ---------------------------------------------------------------------------
-// ROLES — system roles seed (mostra hierarquia + count de membros)
-// ---------------------------------------------------------------------------
 export const demoRoles = [
-  { id: '00000000-0000-0000-0000-000000000001', name: 'owner',    description: 'Proprietário (todas as permissões, indestrutível)', is_system_role: true, members: 1 },
-  { id: '00000000-0000-0000-0000-000000000002', name: 'admin',    description: 'Administrador (gestão completa)',                   is_system_role: true, members: 1 },
-  { id: '00000000-0000-0000-0000-000000000003', name: 'manager',  description: 'Gerente (operações sem settings/roles)',            is_system_role: true, members: 1 },
-  { id: '00000000-0000-0000-0000-000000000004', name: 'operator', description: 'Operador (vendas e estoque)',                       is_system_role: true, members: 1 },
-  { id: '00000000-0000-0000-0000-000000000005', name: 'viewer',   description: 'Visualizador (apenas leitura)',                     is_system_role: true, members: 1 },
+  {
+    id: '00000000-0000-0000-0000-000000000001',
+    name: 'owner',
+    description: 'Proprietário (todas as permissões, indestrutível)',
+    is_system_role: true,
+    members: 1,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000002',
+    name: 'admin',
+    description: 'Administrador (gestão completa)',
+    is_system_role: true,
+    members: 1,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000003',
+    name: 'manager',
+    description: 'Gerente (operações sem settings/roles)',
+    is_system_role: true,
+    members: 1,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000004',
+    name: 'operator',
+    description: 'Operador (vendas e estoque)',
+    is_system_role: true,
+    members: 1,
+  },
+  {
+    id: '00000000-0000-0000-0000-000000000005',
+    name: 'viewer',
+    description: 'Visualizador (apenas leitura)',
+    is_system_role: true,
+    members: 1,
+  },
 ];
 
-// ---------------------------------------------------------------------------
-// Helper genérico: filtragem + ordenação + paginação em memória
-// ---------------------------------------------------------------------------
 export function paginateInMemory(
   rows,
-  { filters = {}, search, searchField = 'name', order = { field: 'created_at', asc: false }, page = 1, perPage = 20 } = {},
+  {
+    filters = {},
+    search,
+    searchField = 'name',
+    order = { field: 'created_at', asc: false },
+    page = 1,
+    perPage = 20,
+  } = {},
 ) {
   let filtered = rows.filter((r) => !r.deleted_at);
 
@@ -274,7 +321,11 @@ export function paginateInMemory(
 
   if (search?.trim()) {
     const term = search.trim().toLowerCase();
-    filtered = filtered.filter((r) => String(r[searchField] ?? '').toLowerCase().includes(term));
+    filtered = filtered.filter((r) =>
+      String(r[searchField] ?? '')
+        .toLowerCase()
+        .includes(term),
+    );
   }
 
   if (order?.field) {
@@ -296,7 +347,6 @@ export function paginateInMemory(
   return { data, count: total, page, perPage, totalPages: Math.max(1, Math.ceil(total / perPage)) };
 }
 
-/** Atualiza array in-place (cria/edita/remove) */
 export function applyMutation(rows, action, payload) {
   if (action === 'create') {
     const item = base(payload);
