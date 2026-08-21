@@ -1,14 +1,6 @@
 import { NavLink, Link } from 'react-router-dom';
-import {
-  ChevronsLeft,
-  ChevronsRight,
-  Sparkles,
-  LogOut,
-  Settings,
-  Building2,
-  Check,
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronsLeft, ChevronsRight, Settings, ChevronDown, Check } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { NAV_MODULES } from '@/constants/modules';
 import { ROUTES } from '@/constants/routes';
 import { useAuthStore } from '@/store/authStore';
@@ -28,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { AuroraLogo, AuroraMark } from '@/components/brand/AuroraLogo';
 import { cn } from '@/lib/cn';
 import { getInitials } from '@/lib/formatters';
 import { toast } from '@/components/ui/toast';
@@ -42,9 +35,9 @@ function ModuleLink({ item, collapsed }) {
       to={item.href}
       className={({ isActive }) =>
         cn(
-          'group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all',
-          'text-muted-foreground hover:bg-accent hover:text-foreground',
-          isActive && 'bg-aurora-soft text-primary hover:bg-aurora-soft hover:text-primary',
+          'interactive group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium',
+          'text-muted-foreground hover:text-foreground',
+          isActive && 'nav-active hover:bg-primary/10 hover:text-primary',
           collapsed && 'justify-center px-2',
         )
       }
@@ -60,7 +53,7 @@ function ModuleLink({ item, collapsed }) {
 
           {!collapsed && <span className="truncate">{item.label}</span>}
           {!collapsed && isActive && (
-            <span className="ml-auto h-1.5 w-1.5 rounded-full bg-primary" />
+            <span className="ml-auto h-1.5 w-1.5 rounded-full bg-accent" />
           )}
         </>
       )}
@@ -96,24 +89,27 @@ function CompanySwitcher({ collapsed }) {
     <button
       type="button"
       className={cn(
-        'flex w-full items-center gap-3 rounded-lg px-2.5 py-2 text-left transition-colors hover:bg-accent',
+        'interactive flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-left',
         collapsed && 'justify-center px-1.5',
       )}
     >
-      <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-aurora text-xs font-semibold text-primary-foreground">
-        {getInitials(company?.name ?? 'AE')}
-      </div>
-      {!collapsed && (
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-semibold text-foreground">
-            {company?.name ?? 'AURORA ERP'}
-          </p>
-          <p className="truncate text-xs text-muted-foreground">
-            {company?.role_name ?? 'Sem empresa ativa'}
-          </p>
-        </div>
+      {collapsed ? (
+        <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-border bg-card text-[0.6875rem] font-semibold text-muted-foreground">
+          {getInitials(company?.name ?? 'AE')}
+        </span>
+      ) : (
+        <>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-medium text-foreground">
+              {company?.name ?? 'Nenhuma empresa'}
+            </p>
+            <p className="truncate text-xs text-muted-foreground">
+              {company?.role_name ?? 'Sem empresa ativa'}
+            </p>
+          </div>
+          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+        </>
       )}
-      {!collapsed && <Building2 className="h-4 w-4 text-muted-foreground" />}
     </button>
   );
 
@@ -151,20 +147,11 @@ function UserMenu({ collapsed }) {
   const displayName = user?.user_metadata?.full_name ?? user?.email?.split('@')[0] ?? 'Usuário';
   const email = user?.email ?? '';
 
-  const handleSignOut = async () => {
-    try {
-      await authRepository.signOut();
-      window.location.href = ROUTES.LOGIN;
-    } catch (err) {
-      toast.error(err.message ?? 'Erro ao sair');
-    }
-  };
-
   const trigger = (
     <button
       type="button"
       className={cn(
-        'flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left transition-colors hover:bg-accent',
+        'interactive flex w-full items-center gap-3 rounded-md px-2 py-2 text-left',
         collapsed && 'justify-center px-1',
       )}
     >
@@ -192,13 +179,6 @@ function UserMenu({ collapsed }) {
             <Settings className="h-4 w-4" /> Configurações
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onSelect={handleSignOut}
-          className="text-destructive focus:text-destructive"
-        >
-          <LogOut className="h-4 w-4" /> Sair
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
@@ -221,22 +201,12 @@ export function Sidebar() {
           collapsed && 'justify-center px-2',
         )}
       >
-        <Link to={ROUTES.DASHBOARD} className="flex items-center gap-2">
-          <div className="grid h-8 w-8 place-items-center rounded-md bg-aurora text-primary-foreground">
-            <Sparkles className="h-4 w-4" />
-          </div>
-          <AnimatePresence>
-            {!collapsed && (
-              <motion.span
-                initial={{ opacity: 0, x: -4 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -4 }}
-                className="text-base font-semibold tracking-tight"
-              >
-                AURORA
-              </motion.span>
-            )}
-          </AnimatePresence>
+        <Link
+          to={ROUTES.DASHBOARD}
+          className="flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          aria-label="Aurora — ir para o dashboard"
+        >
+          {collapsed ? <AuroraMark /> : <AuroraLogo />}
         </Link>
       </div>
 

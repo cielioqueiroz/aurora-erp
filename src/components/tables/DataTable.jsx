@@ -39,7 +39,7 @@ export function DataTable({
   const hasRows = data.length > 0;
 
   return (
-    <div className="rounded-xl border border-border bg-card shadow-card">
+    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-card">
       {toolbar && <div className="border-b border-border p-3">{toolbar}</div>}
 
       <Table>
@@ -95,7 +95,11 @@ export function DataTable({
             ))
           ) : hasRows ? (
             table.getRowModel().rows.map((row) => (
-              <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && 'selected'}
+                className="hover:bg-secondary/60"
+              >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
                     key={cell.id}

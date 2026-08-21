@@ -28,12 +28,11 @@ import { productsHooks } from '@/modules/products/hooks/useProducts';
 import { formatCurrency, formatInteger } from '@/lib/formatters';
 
 const COLORS = [
-  'hsl(var(--primary))',
-  'hsl(var(--accent))',
-  'hsl(var(--success))',
-  'hsl(var(--warning))',
-  'hsl(var(--info))',
-  'hsl(var(--destructive))',
+  'hsl(var(--chart-1))',
+  'hsl(var(--chart-2))',
+  'hsl(var(--chart-3))',
+  'hsl(var(--chart-4))',
+  'hsl(var(--chart-5))',
 ];
 
 function ChartTooltip({ active, payload, label, currency = false }) {
@@ -166,8 +165,8 @@ export function ReportsPage() {
                   <AreaChart data={revenueByDay} margin={{ left: 0, right: 12, top: 8, bottom: 0 }}>
                     <defs>
                       <linearGradient id="rep-receita" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.4} />
-                        <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                        <stop offset="0%" stopColor="hsl(var(--chart-1))" stopOpacity={0.4} />
+                        <stop offset="100%" stopColor="hsl(var(--chart-1))" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid
@@ -196,7 +195,7 @@ export function ReportsPage() {
                       type="monotone"
                       dataKey="receita"
                       name="Receita"
-                      stroke="hsl(var(--primary))"
+                      stroke="hsl(var(--chart-1))"
                       fill="url(#rep-receita)"
                       strokeWidth={2}
                     />
@@ -241,7 +240,7 @@ export function ReportsPage() {
                   <Bar
                     dataKey="receita"
                     name="Receita"
-                    fill="hsl(var(--accent))"
+                    fill="hsl(var(--chart-2))"
                     radius={[0, 6, 6, 0]}
                     barSize={20}
                   />
@@ -286,7 +285,7 @@ export function ReportsPage() {
                   <Bar
                     dataKey="pedidos"
                     name="Pedidos"
-                    fill="hsl(var(--primary))"
+                    fill="hsl(var(--chart-1))"
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>

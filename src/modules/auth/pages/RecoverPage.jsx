@@ -54,7 +54,7 @@ export function RecoverPage() {
   return (
     <div>
       <div className="mb-8 space-y-2">
-        <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-aurora-soft text-primary">
+        <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-secondary text-primary">
           <Mail className="h-6 w-6" />
         </div>
         <h1 className="text-center text-2xl font-semibold tracking-tight">Recuperar senha</h1>

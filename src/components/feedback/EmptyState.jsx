@@ -16,8 +16,8 @@ export function EmptyState({
       )}
     >
       <div className="relative">
-        <div className="absolute inset-0 -z-10 rounded-full bg-aurora-soft blur-xl" />
-        <div className="grid h-14 w-14 place-items-center rounded-full bg-aurora-soft text-primary">
+        <div className="absolute inset-0 -z-10 rounded-full bg-secondary blur-xl" />
+        <div className="grid h-14 w-14 place-items-center rounded-full bg-secondary text-primary">
           <Icon className="h-6 w-6" />
         </div>
       </div>

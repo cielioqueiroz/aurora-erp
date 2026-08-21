@@ -31,8 +31,8 @@ export function RolesListPage() {
                       className={cn(
                         'grid h-10 w-10 place-items-center rounded-lg',
                         role.name === 'owner'
-                          ? 'bg-aurora text-primary-foreground'
-                          : 'bg-aurora-soft text-primary',
+                          ? 'bg-primary text-primary-foreground'
+                          : 'bg-secondary text-primary',
                       )}
                     >
                       {role.is_system_role ? (

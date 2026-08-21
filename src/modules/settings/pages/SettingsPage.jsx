@@ -15,8 +15,8 @@ function ThemeCard({ label, icon: Icon, active, onClick }) {
       className={cn(
         'flex flex-col items-center gap-2 rounded-lg border p-4 text-sm transition-colors',
         active
-          ? 'border-primary bg-aurora-soft text-primary'
-          : 'hover:bg-aurora-soft/40 border-border bg-card hover:border-primary/40',
+          ? 'border-primary bg-secondary text-primary'
+          : 'border-border bg-card hover:border-primary/40 hover:bg-secondary',
       )}
     >
       <Icon className="h-5 w-5" />

@@ -35,7 +35,7 @@ function Stepper({ current }) {
               className={cn(
                 'grid h-8 w-8 place-items-center rounded-full border text-xs font-semibold transition-colors',
                 done && 'border-primary bg-primary text-primary-foreground',
-                active && 'border-primary bg-aurora-soft text-primary',
+                active && 'border-primary bg-secondary text-primary',
                 !active && !done && 'border-border bg-background text-muted-foreground',
               )}
             >

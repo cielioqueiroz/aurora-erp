@@ -1,19 +1,16 @@
 import { Outlet, Link } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
+import { AuroraMark } from '@/components/brand/AuroraLogo';
 
 export function AuthLayout() {
   return (
     <div className="grid min-h-screen w-full bg-background text-foreground lg:grid-cols-2">
-      <div className="bg-onyx relative hidden flex-col justify-between overflow-hidden p-10 text-white lg:flex">
-        <div className="pointer-events-none absolute inset-0 bg-grid opacity-[0.04]" />
+      <div className="relative hidden flex-col justify-between overflow-hidden bg-primary p-10 text-white lg:flex">
         <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-primary/15 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-40 -left-20 h-[28rem] w-[28rem] rounded-full bg-primary/[0.06] blur-3xl" />
 
         <Link to="/" className="relative flex items-center gap-2.5 text-lg font-semibold">
-          <div className="grid h-9 w-9 place-items-center rounded-lg bg-white/[0.06] ring-1 ring-primary/40 backdrop-blur-sm">
-            <Sparkles className="h-5 w-5 text-primary" />
-          </div>
-          <span className="tracking-wide">AURORA ERP</span>
+          <AuroraMark className="h-6 w-6" />
+          <span className="tracking-[-0.02em]">Aurora</span>
         </Link>
 
         <div className="relative max-w-md">
@@ -48,8 +45,8 @@ export function AuthLayout() {
       <div className="flex flex-col">
         <header className="flex items-center justify-between p-6 lg:hidden">
           <Link to="/" className="flex items-center gap-2 text-base font-semibold">
-            <div className="bg-onyx grid h-8 w-8 place-items-center rounded-md ring-1 ring-primary/40">
-              <Sparkles className="h-4 w-4 text-primary" />
+            <div className="grid h-8 w-8 place-items-center rounded-md border border-border">
+              <AuroraMark className="h-4 w-4" />
             </div>
             AURORA ERP
           </Link>

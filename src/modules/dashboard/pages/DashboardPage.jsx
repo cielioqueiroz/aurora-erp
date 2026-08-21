@@ -567,12 +567,12 @@ export function DashboardPage() {
                 <AreaChart data={revenueByDay} margin={{ left: 0, right: 12, top: 8, bottom: 0 }}>
                   <defs>
                     <linearGradient id="grad-receita-dash" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.35} />
-                      <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                      <stop offset="5%" stopColor="hsl(var(--chart-1))" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="hsl(var(--chart-1))" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="grad-custo-dash" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="hsl(var(--accent))" stopOpacity={0.25} />
-                      <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0} />
+                      <stop offset="5%" stopColor="hsl(var(--chart-2))" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="hsl(var(--chart-2))" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid
@@ -604,14 +604,14 @@ export function DashboardPage() {
                   <Area
                     type="monotone"
                     dataKey="receita"
-                    stroke="hsl(var(--primary))"
+                    stroke="hsl(var(--chart-1))"
                     strokeWidth={2}
                     fill="url(#grad-receita-dash)"
                   />
                   <Area
                     type="monotone"
                     dataKey="custo"
-                    stroke="hsl(var(--accent))"
+                    stroke="hsl(var(--chart-2))"
                     strokeWidth={2}
                     fill="url(#grad-custo-dash)"
                   />
@@ -664,7 +664,7 @@ export function DashboardPage() {
                   />
                   <Bar
                     dataKey="value"
-                    fill="hsl(var(--primary))"
+                    fill="hsl(var(--chart-1))"
                     radius={[0, 6, 6, 0]}
                     barSize={20}
                   />
@@ -699,7 +699,7 @@ export function DashboardPage() {
                     key={`${a.kind}-${a.id}`}
                     className="flex items-start gap-3 rounded-lg p-3 transition-colors hover:bg-muted/40"
                   >
-                    <Avatar className="h-9 w-9 bg-aurora-soft text-primary">
+                    <Avatar className="h-9 w-9 bg-secondary text-primary">
                       <AvatarFallback className="bg-transparent">
                         <Icon className="h-4 w-4" />
                       </AvatarFallback>
@@ -725,7 +725,7 @@ export function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="grid h-9 w-9 place-items-center rounded-md bg-aurora-soft text-primary">
+              <div className="grid h-9 w-9 place-items-center rounded-md bg-secondary text-primary">
                 <Package className="h-4 w-4" />
               </div>
               <div className="flex-1">

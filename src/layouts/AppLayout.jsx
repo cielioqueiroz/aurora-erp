@@ -5,6 +5,7 @@ import { Sidebar } from '@/components/navigation/Sidebar';
 import { Topbar } from '@/components/navigation/Topbar';
 import { CommandPalette } from '@/components/navigation/CommandPalette';
 import { DemoBanner } from '@/components/feedback/DemoBanner';
+import { AppFooter } from '@/components/layout/AppFooter';
 
 export function AppLayout() {
   const location = useLocation();
@@ -15,7 +16,7 @@ export function AppLayout() {
         <div className="flex h-screen min-w-0 flex-1 flex-col">
           <DemoBanner />
           <Topbar />
-          <main className="flex-1 overflow-auto">
+          <main className="flex flex-1 flex-col overflow-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={location.pathname}
@@ -28,6 +29,7 @@ export function AppLayout() {
                 <Outlet />
               </motion.div>
             </AnimatePresence>
+            <AppFooter />
           </main>
         </div>
         <CommandPalette />

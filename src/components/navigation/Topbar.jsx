@@ -75,7 +75,7 @@ export function Topbar() {
   };
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-4 border-b border-border bg-background/80 px-6 backdrop-blur-md">
+    <header className="flex h-16 shrink-0 items-center gap-4 border-b border-border bg-background/85 px-6 backdrop-blur-md">
       <div className="min-w-0 flex-1">
         <Breadcrumbs />
       </div>

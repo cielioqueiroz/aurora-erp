@@ -7,14 +7,14 @@ export function KpiCard({ label, value, delta, deltaLabel, icon: Icon, sparkline
   const positive = (delta ?? 0) >= 0;
 
   return (
-    <Card className="overflow-hidden transition-shadow hover:shadow-card-hover">
+    <Card className="hover:shadow-card-hover overflow-hidden transition-shadow">
       <CardContent className="relative p-5">
         <div className="flex items-start justify-between gap-2">
           <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
             {label}
           </p>
           {Icon && (
-            <div className="grid h-8 w-8 place-items-center rounded-md bg-aurora-soft text-primary">
+            <div className="grid h-8 w-8 place-items-center rounded-md bg-secondary text-primary">
               <Icon className="h-4 w-4" />
             </div>
           )}

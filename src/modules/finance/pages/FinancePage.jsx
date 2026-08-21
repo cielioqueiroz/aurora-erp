@@ -333,7 +333,7 @@ function KpiSimple({ label, value, icon: Icon, tone = 'default' }) {
     success: 'text-success bg-success/10',
     danger: 'text-destructive bg-destructive/10',
     warning: 'text-warning bg-warning/10',
-    default: 'text-primary bg-aurora-soft',
+    default: 'text-primary bg-secondary',
   }[tone];
   return (
     <Card>
