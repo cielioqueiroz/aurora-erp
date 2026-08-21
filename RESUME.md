@@ -27,7 +27,7 @@ Sou Cielio Queiroz (cielioqueiroz@hotmail.com). Estou construindo o **Aurora ERP
 - Settings: edição inline de Perfil (nome) e Empresa (razão social/CNPJ/email/telefone) com sincronização imediata no Topbar/`useCurrentCompany()`, gate `settings.update` na empresa, error mapping pra CNPJ duplicado e RLS
 - Nexus LTDA seeded com 368 pedidos, R$ 2.486.252 de receita YTD, dados Jan→Mai 2026
 - Sem comentários no código (decisão explícita do usuário — manter assim)
-- ESLint zero warnings, Prettier aplicado, Vitest com 35 testes (4 suites)
+- ESLint zero warnings, Prettier aplicado, Vitest com 48 testes (5 suites) e ensaio das migrations em Postgres real (`sh supabase/tests/run.sh`)
 
 ## CONVENÇÕES IMPORTANTES (NÃO REVERTER)
 
@@ -39,7 +39,7 @@ Sou Cielio Queiroz (cielioqueiroz@hotmail.com). Estou construindo o **Aurora ERP
 - **Hooks via TanStack Query** (`createResourceHooks`)
 - **Zustand v5**: usar seletores atômicos, nunca retornar objeto literal
 - **Tailwind tokens HSL** em `src/styles/globals.css` — `:root` = light, `.dark` = dark
-- **Demo mode** existe (`VITE_DEMO_MODE`) mas está `false`; rodando com Supabase real
+- **Demo mode** está **ligado** (`VITE_DEMO_MODE=true`) e a autenticação está desligada para apresentação a cliente — ver `docs/DEMO-SEM-LOGIN.md`. Religar é manual
 - **Eu (Cielio) faço o git push** — Claude não deve dar `git push` sozinho
 
 ## PENDÊNCIAS PRIORIZADAS
@@ -58,8 +58,9 @@ Hoje o app funciona pra teste interno, mas o ciclo de vida da conta não está p
 
 ### MVP funcional (ALTA prioridade)
 
-8. ~~**"Novo pedido" wizard**~~ — **implementado**. Tela em `/orders/new`, RPCs transacionais em `supabase/migrations/0007_orders_rpc.sql`, máquina de estados no `OrderDetailSheet`, 13 testes em `src/modules/orders/orderEngine.test.js`. Design em `docs/superpowers/specs/2026-08-19-new-order-design.md` e ADRs 0001-0003.
-   **Pendente:** aplicar a migration 0007 no Supabase (não foi executada) e validar as RPCs contra um Postgres real.
+8. ~~**"Novo pedido" wizard**~~ — **implementado e validado**. Tela em `/orders/new`, RPCs transacionais em `supabase/migrations/0007_orders_rpc.sql`, máquina de estados no `OrderDetailSheet`. Design em `docs/superpowers/specs/2026-08-19-new-order-design.md` e ADRs 0001-0003.
+   As RPCs foram exercitadas contra Postgres 15 real com as migrations e o seed aplicados do zero (`sh supabase/tests/run.sh`): 47 validações rodando como `authenticated` com claims de JWT. O ensaio achou dois defeitos, corrigidos dentro da própria 0007 — pagamento de pedido de valor zero estourava constraint crua, e a view `product_stock_balance` não expunha `is_active`, o que fazia o ProductPicker oferecer produto inativo em produção.
+   **Pendente:** aplicar a migration 0007 no Supabase — segue sem ter sido executada lá.
 9. **Página de Auditoria** consumindo `audit_logs` (criar `src/modules/audit/` com listagem + filtros por usuário/tabela/ação).
 10. **Top produtos no Reports vindo do `order_items` real** — atualmente `Math.random()` em `src/modules/reports/pages/ReportsPage.jsx:86-96`. Query agregada simples.
 11. **Realtime nas notificações** via Supabase Realtime (sino atualiza sem reload quando chega notificação nova).
@@ -87,7 +88,7 @@ Hoje o app funciona pra teste interno, mas o ciclo de vida da conta não está p
 
 25. **Deploy Vercel** (produção + preview por PR).
 26. **CI no GitHub Actions** — rodar `lint + test + build` em todo PR.
-27. **Cobertura de testes** — hoje 35 unit tests (validações). Faltam testes de componentes (RTL já instalado) e e2e (Cypress configurado mas vazio — `cypress/e2e/smoke.cy.js` é o único e é só smoke).
+27. **Cobertura de testes** — hoje 48 unit tests (validações + motor de pedidos) e 47 validações SQL em `supabase/tests/`. Faltam testes de componentes (RTL já instalado) e e2e (Cypress configurado mas vazio — `cypress/e2e/smoke.cy.js` é o único e é só smoke).
 28. **Remover demo mode** (`VITE_DEMO_MODE`, `src/app/demoMode.js`, `src/app/demoFixtures.js`) — já não é necessário rodando com Supabase real.
 29. **Seed `0002_nexus_demo.sql` reproduzível** — atualmente o seed da Nexus não está commitado de forma idempotente; recriar o ambiente do zero é manual.
 30. **PWA manifest + service worker** se o objetivo for "instalar como app no celular".
