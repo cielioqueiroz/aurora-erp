@@ -1,5 +1,5 @@
 import { createRepository } from './baseRepository';
-import { demoInventoryMovements, demoProducts } from '@/app/demoFixtures';
+import { demoInventoryMovements, demoProducts, demoStockBalance } from '@/app/demoFixtures';
 import { isDemoMode } from '@/app/demoMode';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -10,44 +10,48 @@ const baseRepo = createRepository('inventory_movements', {
 
 async function getStockBalance() {
   if (isDemoMode) {
-    const balance = {};
-    for (const mov of demoInventoryMovements) {
-      if (mov.deleted_at) continue;
-      const sign = mov.type === 'in' ? 1 : mov.type === 'out' ? -1 : 0;
-      const delta = mov.type === 'adjust' ? mov.quantity : sign * mov.quantity;
-      balance[mov.product_id] = (balance[mov.product_id] ?? 0) + delta;
-    }
-    return demoProducts.map((p) => ({
-      product: p,
-      balance: balance[p.id] ?? 0,
-      stock_min: p.stock_min,
+    return demoStockBalance().map((row) => ({
+      product: demoProducts.find((p) => p.id === row.product_id) ?? null,
+      balance: row.balance,
+      stock_min: row.stock_min,
     }));
   }
 
   const { data, error } = await supabase
-    .from('inventory_movements')
-    .select('product_id, type, quantity')
-    .order('created_at', { ascending: true });
-  if (error) throw error;
-  const balance = {};
-  for (const mov of data ?? []) {
-    const sign = mov.type === 'in' ? 1 : mov.type === 'out' ? -1 : 0;
-    const delta = mov.type === 'adjust' ? mov.quantity : sign * mov.quantity;
-    balance[mov.product_id] = (balance[mov.product_id] ?? 0) + Number(delta);
-  }
-  const { data: prods, error: pe } = await supabase
-    .from('products')
+    .from('product_stock_balance')
     .select('*')
-    .is('deleted_at', null);
-  if (pe) throw pe;
-  return (prods ?? []).map((p) => ({
-    product: p,
-    balance: balance[p.id] ?? 0,
-    stock_min: p.stock_min,
+    .order('product_name', { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map((row) => ({
+    product: {
+      id: row.product_id,
+      name: row.product_name,
+      sku: row.sku,
+      price: row.price,
+      stock_min: row.stock_min,
+    },
+    balance: Number(row.balance),
+    stock_min: row.stock_min,
   }));
+}
+
+async function listSellableProducts() {
+  if (isDemoMode) {
+    return demoStockBalance()
+      .filter((row) => demoProducts.find((p) => p.id === row.product_id)?.is_active)
+      .map((row) => ({ ...row, balance: Number(row.balance) }));
+  }
+
+  const { data, error } = await supabase
+    .from('product_stock_balance')
+    .select('*')
+    .order('product_name', { ascending: true });
+  if (error) throw error;
+  return (data ?? []).map((row) => ({ ...row, balance: Number(row.balance) }));
 }
 
 export const inventoryRepository = {
   ...baseRepo,
   getStockBalance,
+  listSellableProducts,
 };

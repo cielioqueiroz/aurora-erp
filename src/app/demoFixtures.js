@@ -374,3 +374,272 @@ export function applyMutation(rows, action, payload) {
   }
   return null;
 }
+
+const orderCodePrefix = () => `PED-${new Date().getFullYear()}-`;
+
+function nextOrderCode() {
+  const prefix = orderCodePrefix();
+  const used = demoOrders
+    .map((o) => o.code)
+    .filter((c) => typeof c === 'string' && c.startsWith(prefix))
+    .map((c) => Number(c.slice(prefix.length)))
+    .filter((n) => Number.isFinite(n));
+  const next = (used.length ? Math.max(...used) : 0) + 1;
+  return `${prefix}${String(next).padStart(6, '0')}`;
+}
+
+export function demoStockBalance() {
+  const balance = {};
+  for (const mov of demoInventoryMovements) {
+    const qty = Number(mov.quantity);
+    const delta = mov.type === 'out' ? -qty : qty;
+    balance[mov.product_id] = (balance[mov.product_id] ?? 0) + delta;
+  }
+  return demoProducts
+    .filter((p) => !p.deleted_at)
+    .map((p) => ({
+      product_id: p.id,
+      company_id: p.company_id,
+      product_name: p.name,
+      sku: p.sku,
+      price: p.price,
+      stock_min: p.stock_min,
+      balance: balance[p.id] ?? 0,
+    }));
+}
+
+function itemsOf(orderId) {
+  return demoOrderItems.filter((i) => i.order_id === orderId);
+}
+
+function productOf(productId) {
+  return demoProducts.find((p) => p.id === productId) ?? null;
+}
+
+function applyCommit(order, dueDate) {
+  const balances = Object.fromEntries(demoStockBalance().map((b) => [b.product_id, b]));
+  const missing = itemsOf(order.id)
+    .filter((i) => (balances[i.product_id]?.balance ?? 0) < Number(i.quantity))
+    .map((i) => {
+      const b = balances[i.product_id];
+      return `${b?.product_name ?? i.product_id} (saldo ${b?.balance ?? 0}, pedido ${i.quantity})`;
+    });
+
+  if (missing.length > 0) {
+    throw new Error(
+      `Saldo insuficiente: ${missing.join('; ')}. Registre a entrada em Estoque antes de confirmar.`,
+    );
+  }
+
+  for (const item of itemsOf(order.id)) {
+    demoInventoryMovements.push(
+      base({
+        product_id: item.product_id,
+        type: 'out',
+        quantity: Number(item.quantity),
+        unit_cost: productOf(item.product_id)?.cost ?? null,
+        reason: `Venda — pedido ${order.code}`,
+        reference_type: 'order',
+        reference_id: order.id,
+        created_at: iso(new Date()),
+      }),
+    );
+  }
+
+  if (order.total > 0) {
+    demoFinanceTransactions.unshift(
+      base({
+        type: 'receivable',
+        category: 'Vendas',
+        description: `Pedido ${order.code}`,
+        amount: order.total,
+        due_date: dueDate ?? iso(new Date()).slice(0, 10),
+        paid_at: null,
+        status: 'pending',
+        reference_type: 'order',
+        reference_id: order.id,
+      }),
+    );
+  }
+}
+
+function reverseStock(order, reason) {
+  for (const item of itemsOf(order.id)) {
+    demoInventoryMovements.push(
+      base({
+        product_id: item.product_id,
+        type: 'in',
+        quantity: Number(item.quantity),
+        unit_cost: productOf(item.product_id)?.cost ?? null,
+        reason: `${reason} — pedido ${order.code}`,
+        reference_type: 'order',
+        reference_id: order.id,
+        created_at: iso(new Date()),
+      }),
+    );
+  }
+}
+
+function receivableOf(orderId, status) {
+  return demoFinanceTransactions.find(
+    (t) =>
+      t.reference_type === 'order' &&
+      t.reference_id === orderId &&
+      t.type === 'receivable' &&
+      t.status === status,
+  );
+}
+
+export function demoCreateOrder({
+  items = [],
+  customerId = null,
+  discount = 0,
+  notes = '',
+  dueDate = null,
+  confirm = false,
+}) {
+  if (items.length === 0) throw new Error('O pedido precisa de pelo menos um item');
+  if (discount < 0) throw new Error('O desconto do pedido não pode ser negativo');
+
+  const resolved = items.map((it) => {
+    const product = productOf(it.product_id);
+    if (!product || !product.is_active || product.deleted_at) {
+      throw new Error('Há produtos inválidos ou inativos no pedido');
+    }
+    const quantity = Number(it.quantity);
+    const itemDiscount = Number(it.discount ?? 0);
+    if (!(quantity > 0)) throw new Error('Quantidade deve ser maior que zero');
+    if (itemDiscount < 0) throw new Error('O desconto do item não pode ser negativo');
+    const total = Math.round((quantity * product.price - itemDiscount) * 100) / 100;
+    if (total < 0) throw new Error('O desconto de um item não pode ser maior que o valor da linha');
+    return { product, quantity, unit_price: product.price, discount: itemDiscount, total };
+  });
+
+  const subtotal = Math.round(resolved.reduce((acc, r) => acc + r.total, 0) * 100) / 100;
+  if (subtotal - discount < 0) {
+    throw new Error('O desconto do pedido não pode ser maior que o subtotal');
+  }
+
+  const order = base({
+    code: nextOrderCode(),
+    customer_id: customerId,
+    status: 'draft',
+    subtotal,
+    discount,
+    total: Math.round((subtotal - discount) * 100) / 100,
+    notes,
+    created_at: iso(new Date()),
+  });
+  demoOrders.unshift(order);
+
+  for (const r of resolved) {
+    demoOrderItems.push({
+      id: uid(),
+      order_id: order.id,
+      product_id: r.product.id,
+      quantity: r.quantity,
+      unit_price: r.unit_price,
+      discount: r.discount,
+      total: r.total,
+    });
+  }
+
+  if (confirm) {
+    order.status = 'confirmed';
+    try {
+      applyCommit(order, dueDate);
+    } catch (err) {
+      order.status = 'draft';
+      const idx = demoOrders.indexOf(order);
+      if (idx >= 0) demoOrders.splice(idx, 1);
+      demoOrderItems
+        .filter((i) => i.order_id === order.id)
+        .forEach((i) => demoOrderItems.splice(demoOrderItems.indexOf(i), 1));
+      throw err;
+    }
+  }
+
+  return order;
+}
+
+export function demoConfirmOrder(orderId, dueDate = null) {
+  const order = demoOrders.find((o) => o.id === orderId);
+  if (!order) throw new Error('Pedido não encontrado');
+  if (order.status !== 'draft') throw new Error('Só é possível confirmar um pedido em rascunho');
+  applyCommit(order, dueDate);
+  order.status = 'confirmed';
+  order.updated_at = iso(new Date());
+  return order;
+}
+
+export function demoCancelOrder(orderId) {
+  const order = demoOrders.find((o) => o.id === orderId);
+  if (!order) throw new Error('Pedido não encontrado');
+  if (!['draft', 'confirmed'].includes(order.status)) {
+    throw new Error('Só é possível cancelar um pedido em rascunho ou confirmado');
+  }
+  if (order.status === 'confirmed') {
+    reverseStock(order, 'Cancelamento');
+    const receivable = receivableOf(orderId, 'pending');
+    if (receivable) receivable.status = 'cancelled';
+  }
+  order.status = 'cancelled';
+  order.updated_at = iso(new Date());
+  return order;
+}
+
+export function demoPayOrder(orderId, method, paidAt = null) {
+  const order = demoOrders.find((o) => o.id === orderId);
+  if (!order) throw new Error('Pedido não encontrado');
+  if (order.status !== 'confirmed') throw new Error('Só é possível pagar um pedido confirmado');
+  if (!method) throw new Error('Informe a forma de pagamento');
+
+  const when = paidAt ?? iso(new Date());
+  demoPayments.push({
+    id: uid(),
+    order_id: orderId,
+    method,
+    amount: order.total,
+    paid_at: when,
+    status: 'paid',
+    created_at: when,
+  });
+
+  const receivable = receivableOf(orderId, 'pending');
+  if (receivable) {
+    receivable.status = 'paid';
+    receivable.paid_at = when;
+  }
+
+  order.status = 'paid';
+  order.updated_at = when;
+  return order;
+}
+
+export function demoRefundOrder(orderId) {
+  const order = demoOrders.find((o) => o.id === orderId);
+  if (!order) throw new Error('Pedido não encontrado');
+  if (order.status !== 'paid') throw new Error('Só é possível reembolsar um pedido pago');
+
+  reverseStock(order, 'Reembolso');
+
+  if (order.total > 0) {
+    demoFinanceTransactions.unshift(
+      base({
+        type: 'payable',
+        category: 'Reembolsos',
+        description: `Reembolso do pedido ${order.code}`,
+        amount: order.total,
+        due_date: iso(new Date()).slice(0, 10),
+        paid_at: null,
+        status: 'pending',
+        reference_type: 'order',
+        reference_id: order.id,
+      }),
+    );
+  }
+
+  order.status = 'refunded';
+  order.updated_at = iso(new Date());
+  return order;
+}

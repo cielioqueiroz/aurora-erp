@@ -58,7 +58,8 @@ Hoje o app funciona pra teste interno, mas o ciclo de vida da conta não está p
 
 ### MVP funcional (ALTA prioridade)
 
-8. **"Novo pedido" wizard** — botão hoje desabilitado em `src/modules/orders/pages/OrdersListPage.jsx:138`. Desbloqueia o fluxo de vendas end-to-end. Maior unlock de produto.
+8. ~~**"Novo pedido" wizard**~~ — **implementado**. Tela em `/orders/new`, RPCs transacionais em `supabase/migrations/0007_orders_rpc.sql`, máquina de estados no `OrderDetailSheet`, 13 testes em `src/modules/orders/orderEngine.test.js`. Design em `docs/superpowers/specs/2026-08-19-new-order-design.md` e ADRs 0001-0003.
+   **Pendente:** aplicar a migration 0007 no Supabase (não foi executada) e validar as RPCs contra um Postgres real.
 9. **Página de Auditoria** consumindo `audit_logs` (criar `src/modules/audit/` com listagem + filtros por usuário/tabela/ação).
 10. **Top produtos no Reports vindo do `order_items` real** — atualmente `Math.random()` em `src/modules/reports/pages/ReportsPage.jsx:86-96`. Query agregada simples.
 11. **Realtime nas notificações** via Supabase Realtime (sino atualiza sem reload quando chega notificação nova).

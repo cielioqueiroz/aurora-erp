@@ -13,6 +13,7 @@ export const ROUTES = Object.freeze({
   PRODUCTS: '/products',
   INVENTORY: '/inventory',
   ORDERS: '/orders',
+  ORDER_NEW: '/orders/new',
   FINANCE: '/finance',
   REPORTS: '/reports',
   USERS: '/users',

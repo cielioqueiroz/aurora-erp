@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Eye, ShoppingCart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Eye, Plus, ShoppingCart } from 'lucide-react';
 import { useQueryStates, parseAsInteger, parseAsString } from 'nuqs';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Badge } from '@/components/ui/badge';
@@ -20,8 +21,12 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { ordersHooks } from '../hooks/useOrders';
 import { ORDER_STATUS_MAP } from '../constants';
 import { OrderDetailSheet } from '../components/OrderDetailSheet';
+import { Can } from '@/routes/Can';
+import { PERMISSIONS } from '@/constants/permissions';
+import { ROUTES } from '@/constants/routes';
 
 export function OrdersListPage() {
+  const navigate = useNavigate();
   const [{ page, perPage, search, status, sort, asc }, setQueryStates] = useQueryStates(
     {
       page: parseAsInteger.withDefault(1),
@@ -135,9 +140,12 @@ export function OrdersListPage() {
               </Select>
             }
             actions={
-              <Button variant="outline" disabled>
-                Novo pedido (em breve)
-              </Button>
+              <Can permission={PERMISSIONS.ORDERS_CREATE}>
+                <Button onClick={() => navigate(ROUTES.ORDER_NEW)}>
+                  <Plus className="h-4 w-4" />
+                  Novo pedido
+                </Button>
+              </Can>
             }
           />
         }

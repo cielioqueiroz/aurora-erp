@@ -4,6 +4,11 @@ import {
   demoOrderItems,
   demoPayments,
   demoCustomers,
+  demoCreateOrder,
+  demoConfirmOrder,
+  demoCancelOrder,
+  demoPayOrder,
+  demoRefundOrder,
   applyMutation,
 } from '@/app/demoFixtures';
 import { isDemoMode } from '@/app/demoMode';
@@ -69,8 +74,62 @@ async function getDetail(orderId) {
   return { ...order, items: items ?? [], payments: payments ?? [] };
 }
 
+async function createOrder({
+  items,
+  customerId = null,
+  discount = 0,
+  notes = '',
+  dueDate = null,
+  confirm = false,
+}) {
+  if (isDemoMode) {
+    return demoCreateOrder({ items, customerId, discount, notes, dueDate, confirm });
+  }
+  return unwrap(
+    await supabase.rpc('create_order', {
+      p_items: items,
+      p_customer_id: customerId,
+      p_discount: discount,
+      p_notes: notes,
+      p_due_date: dueDate,
+      p_confirm: confirm,
+    }),
+  );
+}
+
+async function confirmOrder(orderId, dueDate = null) {
+  if (isDemoMode) return demoConfirmOrder(orderId, dueDate);
+  return unwrap(await supabase.rpc('confirm_order', { p_order_id: orderId, p_due_date: dueDate }));
+}
+
+async function cancelOrder(orderId) {
+  if (isDemoMode) return demoCancelOrder(orderId);
+  return unwrap(await supabase.rpc('cancel_order', { p_order_id: orderId }));
+}
+
+async function payOrder(orderId, method, paidAt = null) {
+  if (isDemoMode) return demoPayOrder(orderId, method, paidAt);
+  return unwrap(
+    await supabase.rpc('pay_order', {
+      p_order_id: orderId,
+      p_method: method,
+      p_paid_at: paidAt ?? new Date().toISOString(),
+    }),
+  );
+}
+
+async function refundOrder(orderId) {
+  if (isDemoMode) return demoRefundOrder(orderId);
+  return unwrap(await supabase.rpc('refund_order', { p_order_id: orderId }));
+}
+
 export const ordersRepository = {
   ...baseRepo,
   list: listWithCustomer,
   getDetail,
+  createOrder,
+  confirmOrder,
+  cancelOrder,
+  payOrder,
+  refundOrder,
 };
