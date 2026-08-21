@@ -45,6 +45,7 @@ async function listSellableProducts() {
   const { data, error } = await supabase
     .from('product_stock_balance')
     .select('*')
+    .eq('is_active', true)
     .order('product_name', { ascending: true });
   if (error) throw error;
   return (data ?? []).map((row) => ({ ...row, balance: Number(row.balance) }));

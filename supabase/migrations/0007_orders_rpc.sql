@@ -44,11 +44,12 @@ with (security_invoker = true) as
         when 'out'    then -m.quantity
         when 'adjust' then m.quantity
       end
-    ), 0)::numeric(14, 3) as balance
+    ), 0)::numeric(14, 3) as balance,
+    p.is_active  as is_active
   from public.products p
   left join public.inventory_movements m on m.product_id = p.id
   where p.deleted_at is null
-  group by p.id, p.company_id, p.name, p.sku, p.price, p.stock_min;
+  group by p.id, p.company_id, p.name, p.sku, p.price, p.stock_min, p.is_active;
 
 grant select on public.product_stock_balance to authenticated;
 
@@ -388,8 +389,13 @@ begin
     raise exception 'Informe a forma de pagamento';
   end if;
 
-  insert into public.payments (order_id, method, amount, paid_at, status)
-  values (p_order_id, p_method, v_order.total, p_paid_at, 'paid');
+  -- Pedido de valor zero (desconto integral) não movimenta dinheiro: não há
+  -- pagamento a registrar, do mesmo modo que a confirmação não cria recebível.
+  -- Sem esta guarda o insert bate em payments_amount_check e vaza erro cru.
+  if v_order.total > 0 then
+    insert into public.payments (order_id, method, amount, paid_at, status)
+    values (p_order_id, p_method, v_order.total, p_paid_at, 'paid');
+  end if;
 
   update public.finance_transactions
      set status = 'paid', paid_at = p_paid_at
