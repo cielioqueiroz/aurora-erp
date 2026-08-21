@@ -1,28 +1,10 @@
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { AppLayout } from '@/layouts/AppLayout';
-import { AuthLayout } from '@/layouts/AuthLayout';
-import { ProtectedRoute } from './ProtectedRoute';
-import { PublicOnlyRoute } from './PublicOnlyRoute';
 import { ROUTES } from '@/constants/routes';
-import { PERMISSIONS } from '@/constants/permissions';
 import { LoadingScreen } from '@/components/feedback/LoadingScreen';
 import { NotFoundPage } from '@/modules/_shared/NotFoundPage';
 
-const LoginPage = lazy(() =>
-  import('@/modules/auth/pages/LoginPage').then((m) => ({ default: m.LoginPage })),
-);
-const SignupPage = lazy(() =>
-  import('@/modules/auth/pages/SignupPage').then((m) => ({ default: m.SignupPage })),
-);
-const RecoverPage = lazy(() =>
-  import('@/modules/auth/pages/RecoverPage').then((m) => ({ default: m.RecoverPage })),
-);
-const ResetPasswordPage = lazy(() =>
-  import('@/modules/auth/pages/ResetPasswordPage').then((m) => ({
-    default: m.ResetPasswordPage,
-  })),
-);
 const DashboardPage = lazy(() =>
   import('@/modules/dashboard/pages/DashboardPage').then((m) => ({ default: m.DashboardPage })),
 );
@@ -47,6 +29,9 @@ const InventoryPage = lazy(() =>
 const OrdersListPage = lazy(() =>
   import('@/modules/orders/pages/OrdersListPage').then((m) => ({ default: m.OrdersListPage })),
 );
+const OrderFormPage = lazy(() =>
+  import('@/modules/orders/pages/OrderFormPage').then((m) => ({ default: m.OrderFormPage })),
+);
 const FinancePage = lazy(() =>
   import('@/modules/finance/pages/FinancePage').then((m) => ({ default: m.FinancePage })),
 );
@@ -69,125 +54,33 @@ const lazyLoad = (Component) => (
   </Suspense>
 );
 
+const toDashboard = <Navigate to={ROUTES.DASHBOARD} replace />;
+
 export const router = createBrowserRouter([
+  { path: ROUTES.ROOT, element: toDashboard },
+  { path: ROUTES.LOGIN, element: toDashboard },
+  { path: ROUTES.SIGNUP, element: toDashboard },
+  { path: ROUTES.RECOVER, element: toDashboard },
+  { path: ROUTES.RESET, element: toDashboard },
   {
-    path: '/',
-    element: (
-      <PublicOnlyRoute>
-        <AuthLayout />
-      </PublicOnlyRoute>
-    ),
-
-    children: [
-      { index: true, element: <Navigate to={ROUTES.LOGIN} replace /> },
-      { path: 'login', element: lazyLoad(LoginPage) },
-      { path: 'signup', element: lazyLoad(SignupPage) },
-      { path: 'recover', element: lazyLoad(RecoverPage) },
-    ],
-  },
-  {
-    path: '/reset-password',
-    element: <AuthLayout />,
-    children: [{ index: true, element: lazyLoad(ResetPasswordPage) }],
-  },
-  {
-    element: (
-      <ProtectedRoute>
-        <AppLayout />
-      </ProtectedRoute>
-    ),
-
+    element: <AppLayout />,
     children: [
       {
         path: ROUTES.DASHBOARD,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.DASHBOARD_READ]}>
-            {lazyLoad(DashboardPage)}
-          </ProtectedRoute>
-        ),
-
+        element: lazyLoad(DashboardPage),
         handle: { breadcrumb: 'Dashboard' },
       },
-      {
-        path: ROUTES.CUSTOMERS,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.CUSTOMERS_READ]}>
-            {lazyLoad(CustomersListPage)}
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.SUPPLIERS,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.SUPPLIERS_READ]}>
-            {lazyLoad(SuppliersListPage)}
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.PRODUCTS,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.PRODUCTS_READ]}>
-            {lazyLoad(ProductsListPage)}
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.INVENTORY,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.INVENTORY_READ]}>
-            {lazyLoad(InventoryPage)}
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.ORDERS,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.ORDERS_READ]}>
-            {lazyLoad(OrdersListPage)}
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.FINANCE,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.FINANCE_READ]}>
-            {lazyLoad(FinancePage)}
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.REPORTS,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.REPORTS_READ]}>
-            {lazyLoad(ReportsPage)}
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.USERS,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.USERS_READ]}>
-            {lazyLoad(UsersListPage)}
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.ROLES,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.ROLES_READ]}>
-            {lazyLoad(RolesListPage)}
-          </ProtectedRoute>
-        ),
-      },
-      {
-        path: ROUTES.SETTINGS,
-        element: (
-          <ProtectedRoute requiredPermissions={[PERMISSIONS.SETTINGS_READ]}>
-            {lazyLoad(SettingsPage)}
-          </ProtectedRoute>
-        ),
-      },
+      { path: ROUTES.CUSTOMERS, element: lazyLoad(CustomersListPage) },
+      { path: ROUTES.SUPPLIERS, element: lazyLoad(SuppliersListPage) },
+      { path: ROUTES.PRODUCTS, element: lazyLoad(ProductsListPage) },
+      { path: ROUTES.INVENTORY, element: lazyLoad(InventoryPage) },
+      { path: ROUTES.ORDERS, element: lazyLoad(OrdersListPage) },
+      { path: ROUTES.ORDER_NEW, element: lazyLoad(OrderFormPage) },
+      { path: ROUTES.FINANCE, element: lazyLoad(FinancePage) },
+      { path: ROUTES.REPORTS, element: lazyLoad(ReportsPage) },
+      { path: ROUTES.USERS, element: lazyLoad(UsersListPage) },
+      { path: ROUTES.ROLES, element: lazyLoad(RolesListPage) },
+      { path: ROUTES.SETTINGS, element: lazyLoad(SettingsPage) },
     ],
   },
   { path: '*', element: <NotFoundPage /> },
